@@ -18,7 +18,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Personal candidate fixture
 
 ### Phase 1 — Fingerprint Engine
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Canonical fingerprint types
 - [x] Signal normalization
@@ -36,10 +36,10 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Years-of-experience compatibility
 - [x] Salary compatibility
 - [x] Work-authorization compatibility
-- [ ] Semantic/embedding similarity (provider-backed; terminology similarity prototype added)
+- [x] Semantic/embedding similarity (provider-backed HTTP embedding interface + cosine similarity)
 - [x] Larger benchmark suite (initial benchmark set + CI)
 
-**Current milestone: 1.8 — Benchmark + Semantic Foundation**
+**Current milestone: 1.9 — Phase 1 Complete**
 
 ### Phase 2 — Candidate Intelligence
 **Status: IN PROGRESS**
@@ -128,7 +128,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 
 1. Finish fingerprint compatibility scoring. **DONE**
 2. Ingest real CV files. **DONE**
-3. Generate fingerprints from those CVs.
+3. Generate fingerprints from those CVs. **DONE**
 4. Ingest portfolio/GitHub evidence.
 5. Test against a benchmark set of real job descriptions.
 6. Build the first global job discovery adapters.
