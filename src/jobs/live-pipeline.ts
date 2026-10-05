@@ -14,9 +14,3 @@ export async function discoverAndRankLiveJobs(
  if(center)center.ingest(ranked);
  return {jobs,rankedCount:ranked.length,failures};
 }
-export function createDefaultGlobalSources():JobSource[]{
- return [
-  // Source constructors are imported by the application layer so deployments can
-  // select only providers whose current terms/API access permit automated retrieval.
- ];
-}
