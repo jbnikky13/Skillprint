@@ -19,3 +19,5 @@ export * from "./ranking/index.js";
 export * from "./application/index.js";
 
 export * from "./agent/index.js";
+
+export * from "./command-center/index.js";
