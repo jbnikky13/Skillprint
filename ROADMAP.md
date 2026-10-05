@@ -102,7 +102,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Never fabricate qualifications / truth-gated execution
 
 ### Phase 7 — Career Command Center
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Dashboard data/command-center layer
 - [x] Opportunity feed/state management
@@ -115,14 +115,14 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Notifications
 
 ### Phase 8 — Global Product
-**Status: PLANNED**
+**Status: IN PROGRESS**
 
-- [ ] Multi-user accounts
-- [ ] Privacy controls
-- [ ] Billing
-- [ ] Public API
-- [ ] Skillprint fingerprint API
-- [ ] Recruiter/company mode
+- [x] Multi-user account model
+- [x] Privacy controls
+- [x] Plan/subscription and capability gating
+- [x] Public API/key foundation
+- [x] Skillprint API contract foundation
+- [x] Recruiter/company search and permission foundation
 
 ## Immediate build sequence
 
