@@ -15,7 +15,6 @@ export function evaluatePolicy(task: ApplicationTask, policy: AgentPolicy = DEFA
   if (!policy.allowedModes.includes(task.mode)) reasons.push("Agent mode is disabled by policy.");
   if (task.package.job.status === "expired" && policy.respectJobExpiration) reasons.push("Job is expired.");
   if (task.package.truthReport.valid === false) reasons.push("Application contains unsupported or contradictory claims.");
-  const score = task.package.job.fingerprint ? task.package.job.fingerprint.version : 0;
-  if (score < 1) reasons.push("Job fingerprint is invalid.");
+  if (!task.package.job.fingerprint || task.package.job.fingerprint.version < 1) reasons.push("Job fingerprint is invalid.");
   return { allowed: reasons.length === 0, reasons };
 }
