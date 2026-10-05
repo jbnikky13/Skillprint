@@ -20,9 +20,8 @@ export function createRemoteJobsSource(): JobSource {
           location: String(job.location ?? ""),
           remote: true,
           postedAt: job.posted_at ? String(job.posted_at) : undefined,
-          salary: job.salary_text ? { text: String(job.salary_text) } : undefined,
           source: "remotejobs.org",
-          metadata: { category: (job.category as Record<string, unknown> | undefined)?.slug, type: job.type }
+          metadata: { category: (job.category as Record<string, unknown> | undefined)?.slug, type: job.type, salaryText: job.salary_text ? String(job.salary_text) : undefined }
         };
       });
     }
