@@ -1,0 +1,8 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { CareerCommandCenter, calculateAnalytics, ingestStatusEmail } from "../dist/command-center/index.js";
+const job=(id="j1")=>({id,title:"AI Evaluator",description:"Evaluate AI data",url:"https://example.com/"+id,company:"Example",source:"test",discoveredAt:new Date().toISOString(),status:"active",fingerprint:{version:1,kind:"job",title:"AI Evaluator",skills:[],tools:[],domains:[],roles:[],locations:[],remoteEligible:true,remoteScope:"worldwide"}});
+const ranked=(id="j1")=>({job:job(id),match:{score:90,eligible:true,confidence:.9,matched:[],missing:[],reasons:[],breakdown:{skills:100,tools:100,domains:100,roles:100,seniority:100,experience:100,salary:100,authorization:100}},semanticScore:.9,qualityScore:90,scamScore:0,salaryQualityScore:50,effortScore:100,finalScore:91,rankReasons:[]});
+test("command center tracks opportunities through pipeline",()=>{const c=new CareerCommandCenter();c.ingest([ranked()]);c.saveJob("j1");assert.equal(c.snapshot().opportunities[0].stage,"saved");c.queueJob("j1");assert.equal(c.snapshot().opportunities[0].stage,"queued");});
+test("analytics calculate funnel rates",()=>{const c=new CareerCommandCenter();c.ingest([ranked("j1"),ranked("j2")]);const a=calculateAnalytics(c.snapshot());assert.equal(a.activeOpportunities,2);assert.equal(a.averageMatchScore,91);});
+test("status email is classified",()=>{const c=new CareerCommandCenter();const m=ingestStatusEmail(c,{subject:"Interview invitation",body:"Please schedule an interview",jobId:"j1"});assert.equal(m.kind,"interview");});
