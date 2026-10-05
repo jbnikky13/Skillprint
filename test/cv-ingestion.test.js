@@ -21,7 +21,7 @@ Pharmacy
 
   assert.ok(cv.profile.skills.includes("data-annotation"));
   assert.ok(cv.profile.skills.includes("llm-evaluation"));
-  assert.ok(cv.profile.domains.includes("healthcare"));
-  assert.ok(cv.profile.domains.includes("blockchain"));
+  assert.ok(cv.profile.priorityDomains.includes("healthcare"));
+  assert.ok(cv.profile.priorityDomains.includes("blockchain"));
   assert.equal(cv.profile.tools.includes("github"), false);
 });
