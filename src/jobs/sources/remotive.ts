@@ -18,9 +18,8 @@ export function createRemotiveSource(): JobSource {
         location: String(job.candidate_required_location ?? ""),
         remote: true,
         postedAt: job.publication_date ? String(job.publication_date) : undefined,
-        salary: job.salary ? { text: String(job.salary) } : undefined,
         source: "remotive",
-        metadata: { category: job.category, jobType: job.job_type }
+        metadata: { category: job.category, jobType: job.job_type, salaryText: job.salary ? String(job.salary) : undefined }
       }));
     }
   };
