@@ -13,3 +13,5 @@ export * from "./candidate/index.js";
 export * from "./versioning.js";
 
 export * from "./jobs/index.js";
+
+export * from "./ranking/index.js";
