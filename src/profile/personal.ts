@@ -37,3 +37,5 @@ export function rankJobs(jobs: CandidateJobPair[]) {
     .map(({ title, job }) => ({ title, result: matchFingerprints(personalCandidate, job) }))
     .sort((a, b) => Number(b.result.eligible) - Number(a.result.eligible) || b.result.score - a.result.score);
 }
+
+export { defaultPersonalPreferences, matchPersonalJobs, selectCvForJob } from "./job-search.js";
