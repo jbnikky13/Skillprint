@@ -2,7 +2,7 @@ import type { ApplicationPackage } from "../application/types.js";
 import type { NormalizedJob } from "../jobs/types.js";
 
 export type AgentMode = "manual" | "approval" | "autonomous";
-export type ApplicationState = "queued" | "ready" | "awaiting_approval" | "submitted" | "failed" | "blocked";
+export type ApplicationState = "queued" | "ready" | "awaiting_approval" | "approved" | "submitted" | "failed" | "blocked";
 
 export interface ApplicationTask {
   id: string;
