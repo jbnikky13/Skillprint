@@ -9,5 +9,5 @@ export function fuseCareerEvidence(base:CareerFingerprint,sources:CareerEvidence
  return evidenceToFingerprint(createEvidenceGraph(base.id ?? "candidate",items),base);
 }
 export function cvEvidence(profile:CVProfile):CareerEvidenceSource[]{return [{source:profile.id,title:"CV",description:profile.label,signals:[...profile.skills,...profile.tools,...profile.targetRoles],confidence:.9}];}
-export function portfolioEvidence(profile:PortfolioProfile):EvidenceSource[]{return profile.projects.map(p=>({source:p.url??"portfolio",title:p.title,description:p.description,signals:[...p.technologies,...p.domains,...p.roles],confidence:.85}));}
+export function portfolioEvidence(profile:PortfolioProfile):CareerEvidenceSource[]{return profile.projects.map(p=>({source:"portfolio",title:p.title,description:p.description,signals:[...p.technologies,...p.domains,...p.roles],confidence:.85}));}
 export function mergeEvidenceSources(base:CareerFingerprint,...sources:CareerEvidenceSource[][]):CareerFingerprint{return fuseCareerEvidence(base,sources.flat());}
