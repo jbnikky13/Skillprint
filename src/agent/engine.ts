@@ -6,13 +6,16 @@ import { audit, type AuditRecord } from "./audit.js";
 import { RateLimiter } from "./rate-limit.js";
 import { DEFAULT_SITE_RULES, ruleFor, type SiteRule } from "./site-rules.js";
 import { WorkflowRegistry, createGenericWorkflow } from "./workflows.js";
+import { ApplicationArchive } from "../application/archive.js";
 
 export class ApplicationAgent {
   private readonly limiter: RateLimiter;
   private readonly registry: WorkflowRegistry;
+  readonly archive: ApplicationArchive;
   constructor(private readonly policy: AgentPolicy = DEFAULT_AGENT_POLICY, siteRules: SiteRule[] = DEFAULT_SITE_RULES) {
     this.limiter = new RateLimiter(policy.maxApplicationsPerRun, 60 * 60 * 1000);
     this.registry = new WorkflowRegistry();
+    this.archive = new ApplicationArchive();
     this.registry.register(createGenericWorkflow());
     this.siteRules = siteRules;
   }
@@ -51,6 +54,7 @@ export class ApplicationAgent {
       if(!workflow){task.state="failed";return{submission:{accepted:false,message:"No compatible application workflow."},audit:[audit(task,"failed","No compatible application workflow.")]};}
       const result=await workflow.run(task,browser);
       task.state=result.accepted?"submitted":"failed";
+      this.archive.save(task.package,result);
       return{submission:result,audit:[audit(task,"opened",task.job.url),audit(task,result.accepted?"submitted":"failed",result.message)]};
     } catch(error) {
       task.state="failed";
