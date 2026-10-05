@@ -5,7 +5,8 @@
   "description": "Career fingerprinting engine for matching candidates to global opportunities.",
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "build": "tsc",
+    "test": "npm run build && node --test",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
