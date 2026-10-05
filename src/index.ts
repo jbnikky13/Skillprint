@@ -11,3 +11,5 @@ export * from "./github/index.js";
 export * from "./evidence/index.js";
 export * from "./candidate/index.js";
 export * from "./versioning.js";
+
+export * from "./jobs/index.js";
