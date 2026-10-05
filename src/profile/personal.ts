@@ -1,4 +1,5 @@
-import { createFingerprint, matchFingerprints } from "./index.js";
+import { createFingerprint } from "../fingerprint/create.js";
+import { matchFingerprints } from "../matching/similarity.js";
 
 export const personalCandidate = createFingerprint({
   kind: "candidate",
