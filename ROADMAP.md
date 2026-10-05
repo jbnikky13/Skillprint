@@ -31,15 +31,15 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Personal candidate benchmark
 - [x] Multi-CV profile model
 - [x] Automatic CV ranking
-- [ ] Required vs preferred job requirements
-- [ ] Seniority compatibility
-- [ ] Years-of-experience compatibility
-- [ ] Salary compatibility
-- [ ] Work-authorization compatibility
+- [x] Required vs preferred job requirements
+- [x] Seniority compatibility
+- [x] Years-of-experience compatibility
+- [x] Salary compatibility
+- [x] Work-authorization compatibility
 - [ ] Semantic/embedding similarity
 - [ ] Larger benchmark suite
 
-**Current milestone: 1.6 — Multi-CV Intelligence**
+**Current milestone: 1.7 — Compatibility Scoring**
 
 ### Phase 2 — Candidate Intelligence
 **Status: NEXT**
@@ -126,7 +126,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 
 ## Immediate build sequence
 
-1. Finish fingerprint compatibility scoring.
+1. Finish fingerprint compatibility scoring. **DONE**
 2. Ingest real CV files.
 3. Generate fingerprints from those CVs.
 4. Ingest portfolio/GitHub evidence.
