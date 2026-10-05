@@ -1,0 +1,4 @@
+import test from "node:test";import assert from "node:assert/strict";import {matchPersonalJobs,selectCvForJob} from "../dist/profile/job-search.js";
+const base={id:"j",title:"AI Data Evaluator",description:"LLM evaluation and data annotation",url:"https://example.com",location:"Remote",remote:true,status:"active",discoveredAt:"",source:"test",fingerprint:{kind:"job",title:"AI Data Evaluator",skills:["AI","data annotation","AI evaluation"],tools:[],domains:["AI","data"],roles:["AI evaluator"],locations:["worldwide"],remoteEligible:true,remoteScope:"worldwide",evidence:[]}};
+test("selects AI/data CV for matching job",()=>assert.equal(selectCvForJob(base),"ai-data"));
+test("personal matcher applies score and exclusion rules",()=>{const r=matchPersonalJobs([base],{locations:["Nigeria"],remoteOnly:true,minimumScore:1,preferredRoles:["AI evaluator"],excludedKeywords:[]})[0];assert.equal(r.eligible,true);assert.equal(r.recommendedCvId,"ai-data");});
