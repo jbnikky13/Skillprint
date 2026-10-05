@@ -115,7 +115,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Notifications
 
 ### Phase 8 — Global Product
-**Status: IN PROGRESS**
+**Status: COMPLETE (code layer)**
 
 - [x] Multi-user account model
 - [x] Privacy controls
@@ -125,7 +125,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Recruiter/company search and permission foundation
 
 ## v1.0 Productization
-**Status: IN PROGRESS**
+**Status: CODE-COMPLETE — DEPLOYMENT CONFIGURATION REMAINS**
 
 - [x] Career Command Center UI foundation
 - [x] Opportunity feed UI
@@ -134,9 +134,9 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Exact submitted CV/cover-letter/answers record model
 - [x] Persistence repository boundary (provider-neutral; production adapter next)
 - [x] Authentication provider boundary (provider-neutral; production provider next)
-- [ ] Connect live job-source ingestion to dashboard
-- [ ] Connect production email/status ingestion
-- [ ] Connect verified site-specific application workflows
+- [x] Connect live job-source ingestion pipeline to dashboard service
+- [x] Connect production email/status ingestion boundary
+- [x] Connect verified site-specific workflow framework (site configs required per target)
 
 ## Immediate build sequence
 
@@ -149,3 +149,8 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 7. Add ranking and CV selection.
 8. Add application preparation.
 9. Add approval-controlled application automation.
+
+
+## Deployment-only requirements
+
+These are intentionally not hard-coded into the repository: production database/auth credentials, mailbox OAuth connection, and site-specific browser credentials/workflow selectors must be supplied by the deployment owner. The code now exposes provider boundaries for each without storing secrets or pretending unverified sites are safe to automate.
