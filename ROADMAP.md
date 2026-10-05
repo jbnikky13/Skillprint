@@ -80,7 +80,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Application effort score
 
 ### Phase 5 — CV & Application Intelligence
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Job-specific CV selection
 - [x] CV tailoring
@@ -91,15 +91,15 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Approval queue
 
 ### Phase 6 — Application Agent
-**Status: PLANNED**
+**Status: IN PROGRESS**
 
-- [ ] Manual mode
-- [ ] Approval mode
-- [ ] Autonomous mode
-- [ ] Browser/application workflow
-- [ ] Rate limits and site rules
-- [ ] Application audit trail
-- [ ] Never fabricate qualifications
+- [x] Manual mode
+- [x] Approval mode
+- [x] Autonomous mode (policy-gated)
+- [x] Browser/application workflow interface + workflow registry
+- [x] Rate limits and site rules
+- [x] Application audit trail
+- [x] Never fabricate qualifications / truth-gated execution
 
 ### Phase 7 — Career Command Center
 **Status: PLANNED**
