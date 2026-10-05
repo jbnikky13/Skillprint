@@ -91,7 +91,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Approval queue
 
 ### Phase 6 — Application Agent
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Manual mode
 - [x] Approval mode
@@ -102,17 +102,17 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Never fabricate qualifications / truth-gated execution
 
 ### Phase 7 — Career Command Center
-**Status: PLANNED**
+**Status: IN PROGRESS**
 
-- [ ] Dashboard
-- [ ] Opportunity feed
-- [ ] Saved jobs
-- [ ] Application queue
-- [ ] Interview tracking
-- [ ] Offer tracking
-- [ ] Email/status ingestion
-- [ ] Analytics
-- [ ] Notifications
+- [x] Dashboard data/command-center layer
+- [x] Opportunity feed/state management
+- [x] Saved jobs
+- [x] Application queue
+- [x] Interview tracking
+- [x] Offer tracking
+- [x] Email/status ingestion/classification
+- [x] Funnel analytics
+- [x] Notifications
 
 ### Phase 8 — Global Product
 **Status: PLANNED**
