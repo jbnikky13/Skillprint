@@ -132,8 +132,8 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Application queue UI
 - [x] Sent application archive UI
 - [x] Exact submitted CV/cover-letter/answers record model
-- [ ] Persist dashboard data with production database
-- [ ] Connect authenticated user accounts
+- [x] Persistence repository boundary (provider-neutral; production adapter next)
+- [x] Authentication provider boundary (provider-neutral; production provider next)
 - [ ] Connect live job-source ingestion to dashboard
 - [ ] Connect production email/status ingestion
 - [ ] Connect verified site-specific application workflows
