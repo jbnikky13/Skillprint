@@ -5,3 +5,7 @@ export * from "./remotive.js";
 export * from "./remotejobs.js";
 export * from "./arbeitnow.js";
 export * from "./nigeria.js";
+export * from "./jobicy.js";
+export * from "./himalayas.js";
+export * from "./boqqs.js";
+export * from "./jsonld.js";
