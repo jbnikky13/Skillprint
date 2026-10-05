@@ -6,3 +6,4 @@ export * from "./discovery.js";
 export * from "./sources/http.js";
 export * from "./sources/company.js";
 export * from "./sources/catalog.js";
+export * from "./scheduler.js";
