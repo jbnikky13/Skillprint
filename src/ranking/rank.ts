@@ -13,7 +13,7 @@ export async function rankOpportunities(
   options: RankingOptions = {}
 ): Promise<RankedOpportunity[]> {
   const max = options.maxCandidates ?? jobs.length;
-  const base = jobs.map((job) => ({ job, match: matchFingerprints(candidate, job) }))
+  const base = jobs.map((job) => ({ job, match: matchFingerprints(candidate, job.fingerprint) }))
     .filter((x) => x.match.eligible)
     .sort((a, b) => b.match.score - a.match.score)
     .slice(0, max);
