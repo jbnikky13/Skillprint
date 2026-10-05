@@ -39,3 +39,5 @@ export function rankJobs(jobs: CandidateJobPair[]) {
 }
 
 export { defaultPersonalPreferences, matchPersonalJobs, selectCvForJob } from "./job-search.js";
+
+export * from "./evidence-fusion.js";
