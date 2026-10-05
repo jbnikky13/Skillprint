@@ -4,6 +4,7 @@ export * from "./select.js";
 export * from "./parse.js";
 export * from "./extract.js";
 export * from "./ingest.js";
+export * from "./fingerprint.js";
 export * from "./documents.js";
 export * from "./adapters/index.js";
 export * from "./adapters/real.js";
