@@ -124,6 +124,20 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Skillprint API contract foundation
 - [x] Recruiter/company search and permission foundation
 
+## v1.0 Productization
+**Status: IN PROGRESS**
+
+- [x] Career Command Center UI foundation
+- [x] Opportunity feed UI
+- [x] Application queue UI
+- [x] Sent application archive UI
+- [x] Exact submitted CV/cover-letter/answers record model
+- [ ] Persist dashboard data with production database
+- [ ] Connect authenticated user accounts
+- [ ] Connect live job-source ingestion to dashboard
+- [ ] Connect production email/status ingestion
+- [ ] Connect verified site-specific application workflows
+
 ## Immediate build sequence
 
 1. Finish fingerprint compatibility scoring. **DONE**
