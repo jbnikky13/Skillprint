@@ -21,3 +21,5 @@ export * from "./application/index.js";
 export * from "./agent/index.js";
 
 export * from "./command-center/index.js";
+
+export * from "./product/index.js";
