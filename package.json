@@ -9,7 +9,8 @@
     "test": "npm run build && node --test",
     "typecheck": "tsc --noEmit",
     "benchmark": "npm run build && node --test test/benchmark.test.js test/embeddings.test.js",
-    "check": "npm run typecheck && npm test"
+    "check": "npm run typecheck && npm test",
+    "smoke": "npm run build && node dist/smoke.js"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
