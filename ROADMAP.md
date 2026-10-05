@@ -68,7 +68,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Scheduled discovery
 
 ### Phase 4 — Intelligent Ranking
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Fast fingerprint retrieval
 - [x] Vector/semantic retrieval
@@ -80,15 +80,15 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Application effort score
 
 ### Phase 5 — CV & Application Intelligence
-**Status: PLANNED**
+**Status: IN PROGRESS**
 
-- [ ] Job-specific CV selection
-- [ ] CV tailoring
-- [ ] ATS-aware formatting
-- [ ] Cover letters
-- [ ] Application question answers
-- [ ] Truth/consistency checker
-- [ ] Approval queue
+- [x] Job-specific CV selection
+- [x] CV tailoring
+- [x] ATS-aware content selection foundation
+- [x] Cover letters
+- [x] Application question answer guardrails
+- [x] Truth/consistency checker
+- [x] Approval queue
 
 ### Phase 6 — Application Agent
 **Status: PLANNED**
