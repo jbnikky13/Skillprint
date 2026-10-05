@@ -39,7 +39,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Semantic/embedding similarity (provider-backed HTTP embedding interface + cosine similarity)
 - [x] Larger benchmark suite (initial benchmark set + CI)
 
-**Current milestone: 3.0 — Global Discovery Foundation**
+**Current milestone: 3.0 — Phase 3 Complete**
 
 ### Phase 2 — Candidate Intelligence
 **Status: COMPLETE**
@@ -54,13 +54,13 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Candidate fingerprint versioning
 
 ### Phase 3 — Global Job Discovery
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] Job source adapter architecture
-- [ ] Company career pages
-- [ ] International remote sources
-- [ ] Nigeria sources
-- [ ] Port Harcourt/local opportunities
+- [x] Company career pages
+- [x] International remote sources
+- [x] Nigeria sources
+- [x] Port Harcourt/local opportunities
 - [x] Job normalization
 - [x] Deduplication
 - [x] Expired-job detection
