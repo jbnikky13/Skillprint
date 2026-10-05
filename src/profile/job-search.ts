@@ -30,7 +30,7 @@ export function matchPersonalJobs(jobs:NormalizedJob[],preferences:PersonalJobPr
    const excluded=preferences.excludedKeywords.some(k=>text.includes(norm(k)));
    const remoteOk=!preferences.remoteOnly||Boolean(job.remote);
    const locationOk=!preferences.locations.length||preferences.locations.some(l=>text.includes(norm(l))||job.remote);
-   const result=matchFingerprints(personalCandidate,job as never);
+   const result=matchFingerprints(personalCandidate,job.fingerprint);
    const score=result.score;
    const reasons=[
     result.eligible?"Profile is eligible":"Profile eligibility is limited",
