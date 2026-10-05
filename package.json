@@ -7,7 +7,9 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "benchmark": "npm run build && node --test test/benchmark.test.js",
+    "check": "npm run typecheck && npm test"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
