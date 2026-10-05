@@ -2,203 +2,136 @@
 
 ## Product North Star
 
-Build a global career agent that continuously discovers opportunities, creates a fingerprint for every opportunity, compares them against a candidate's professional fingerprint, selects the strongest evidence/CV, prepares an accurate application, and optionally submits it.
+Build a global career agent that continuously discovers opportunities, fingerprints them, compares them against a candidate's professional fingerprint, selects the strongest evidence/CV, prepares an accurate application, and optionally submits it.
 
-## Phase 0 — Foundation
+## Progress
 
-Status: STARTED
+### Phase 0 — Foundation
+**Status: COMPLETE**
 
-- [x] Create repository
-- [x] Define Career Fingerprint concept
-- [x] Define global-first product direction
-- [x] Establish roadmap
-- [ ] Define canonical data model
-- [ ] Define matching benchmark dataset
+- [x] Repository created
+- [x] Career Fingerprint concept
+- [x] Global-first direction
+- [x] Architecture and roadmap
+- [x] Initial data model
+- [x] Initial matching engine
+- [x] Personal candidate fixture
 
-## Phase 1 — Career Fingerprint Engine
+### Phase 1 — Fingerprint Engine
+**Status: IN PROGRESS**
 
-Status: CURRENT
+- [x] Canonical fingerprint types
+- [x] Signal normalization
+- [x] Candidate fingerprint generation
+- [x] Job fingerprint generation
+- [x] Weighted similarity
+- [x] Evidence-aware scoring
+- [x] Remote/location eligibility
+- [x] Match explanations
+- [x] Personal candidate benchmark
+- [x] Multi-CV profile model
+- [x] Automatic CV ranking
+- [ ] Required vs preferred job requirements
+- [ ] Seniority compatibility
+- [ ] Years-of-experience compatibility
+- [ ] Salary compatibility
+- [ ] Work-authorization compatibility
+- [ ] Semantic/embedding similarity
+- [ ] Larger benchmark suite
 
-### Candidate fingerprint
+**Current milestone: 1.6 — Multi-CV Intelligence**
 
-- [ ] CV text normalization
-- [ ] Skill extraction schema
-- [ ] Experience extraction
-- [ ] Industry/domain extraction
-- [ ] Project/evidence extraction
-- [ ] Portfolio/GitHub evidence model
-- [ ] Location and remote eligibility
-- [ ] Salary preferences
-- [ ] Work authorization constraints
-- [ ] Career intent/preferences
-- [ ] Deterministic fingerprint generation
+### Phase 2 — Candidate Intelligence
+**Status: NEXT**
 
-### Job fingerprint
-
-- [ ] Job description normalization
-- [ ] Required vs preferred skills
-- [ ] Seniority
-- [ ] Industry/domain
-- [ ] Remote/location eligibility
-- [ ] Compensation
-- [ ] Experience requirements
-- [ ] Education/certification requirements
-- [ ] Application constraints
-- [ ] Deterministic fingerprint generation
-
-### Matching
-
-- [ ] Weighted similarity engine
-- [ ] Hard eligibility filters
-- [ ] Semantic similarity layer
-- [ ] Evidence strength scoring
-- [ ] Match explanation
-- [ ] Skill-gap detection
-- [ ] Match confidence
-- [ ] Benchmark tests
-
-Phase 1 exit condition: given a candidate profile and a job, Skillprint produces a reproducible match score plus an explanation of why the match exists.
-
-## Phase 2 — Candidate Intelligence
-
-Status: PLANNED
-
-- [ ] CV library
-- [ ] Multiple career profiles
+- [ ] CV file ingestion
+- [ ] PDF/DOCX text extraction
+- [ ] CV fingerprint generation
 - [ ] Portfolio ingestion
-- [ ] GitHub project analysis
+- [ ] GitHub repository analysis
+- [ ] Evidence graph
 - [ ] Career skill graph
-- [ ] Evidence weighting
-- [ ] Skill aliases and ontology
 - [ ] Candidate fingerprint versioning
-- [ ] Discover jobs the candidate did not know they qualified for
 
-## Phase 3 — Global Job Discovery
+### Phase 3 — Global Job Discovery
+**Status: PLANNED**
 
-Status: PLANNED
-
-- [ ] Job source adapters
+- [ ] Job source adapter architecture
 - [ ] Company career pages
-- [ ] Remote-first sources
-- [ ] Nigeria-specific sources
-- [ ] International sources
-- [ ] Job deduplication
+- [ ] International remote sources
+- [ ] Nigeria sources
+- [ ] Port Harcourt/local opportunities
+- [ ] Job normalization
+- [ ] Deduplication
 - [ ] Expired-job detection
-- [ ] Location eligibility detection
-- [ ] Worldwide vs country-restricted remote detection
+- [ ] Remote eligibility detection
 - [ ] Scheduled discovery
 
-Phase 3 exit condition: Skillprint can continuously ingest and normalize opportunities from multiple legitimate sources.
-
-## Phase 4 — Intelligent Ranking
-
-Status: PLANNED
+### Phase 4 — Intelligent Ranking
+**Status: PLANNED**
 
 - [ ] Fast fingerprint retrieval
 - [ ] Vector/semantic retrieval
 - [ ] LLM deep evaluation
 - [ ] Multi-stage ranking
-- [ ] Match explanations
 - [ ] Opportunity quality score
-- [ ] Fraud/scam signals
+- [ ] Scam/fraud signals
 - [ ] Salary quality score
 - [ ] Application effort score
 
-Target pipeline:
+### Phase 5 — CV & Application Intelligence
+**Status: PLANNED**
 
-    Thousands of jobs
-          |
-    Eligibility filter
-          |
-    Fingerprint retrieval
-          |
-        Top 100
-          |
-    Semantic reranking
-          |
-         Top 20
-          |
-    Deep AI evaluation
-          |
-    Best opportunities
-
-## Phase 5 — CV & Application Intelligence
-
-Status: PLANNED
-
-- [ ] CV library
-- [ ] Automatic CV selection
-- [ ] Job-specific CV tailoring
+- [ ] Job-specific CV selection
+- [ ] CV tailoring
 - [ ] ATS-aware formatting
 - [ ] Cover letters
-- [ ] Application question generation
+- [ ] Application question answers
 - [ ] Truth/consistency checker
-- [ ] Human approval queue
+- [ ] Approval queue
 
-## Phase 6 — Application Agent
+### Phase 6 — Application Agent
+**Status: PLANNED**
 
-Status: PLANNED
+- [ ] Manual mode
+- [ ] Approval mode
+- [ ] Autonomous mode
+- [ ] Browser/application workflow
+- [ ] Rate limits and site rules
+- [ ] Application audit trail
+- [ ] Never fabricate qualifications
 
-Three modes:
-
-### Manual
-Skillprint prepares everything; user submits.
-
-### Approval
-Skillprint prepares applications and waits for approval.
-
-### Autonomous
-Skillprint submits applications that satisfy user-defined rules.
-
-Safety requirements:
-
-- Never invent experience
-- Never invent qualifications
-- Never alter factual employment history
-- Never bypass application security controls
-- Respect site terms and rate limits
-- Require approval for sensitive or high-risk applications
-
-## Phase 7 — Career Command Center
-
-Status: PLANNED
+### Phase 7 — Career Command Center
+**Status: PLANNED**
 
 - [ ] Dashboard
-- [ ] Saved opportunities
+- [ ] Opportunity feed
+- [ ] Saved jobs
 - [ ] Application queue
-- [ ] Application history
 - [ ] Interview tracking
 - [ ] Offer tracking
-- [ ] Email/application status ingestion
+- [ ] Email/status ingestion
 - [ ] Analytics
-- [ ] Daily career brief
 - [ ] Notifications
 
-## Phase 8 — Personal Agent -> Global Product
-
-Status: PLANNED
-
-First prove Skillprint on a real candidate workflow.
-
-Then generalize:
+### Phase 8 — Global Product
+**Status: PLANNED**
 
 - [ ] Multi-user accounts
-- [ ] Candidate onboarding
 - [ ] Privacy controls
 - [ ] Billing
-- [ ] Usage limits
-- [ ] Team/recruiter mode
 - [ ] Public API
 - [ ] Skillprint fingerprint API
+- [ ] Recruiter/company mode
 
-## Current build target
+## Immediate build sequence
 
-Phase 1.1 — Deterministic Fingerprint Engine
-
-The immediate goal is not scraping or auto-applying.
-
-The immediate goal is proving:
-
-Can a structured career fingerprint find a genuinely better match than simple keyword overlap?
-
-Once that works, everything else can be built around it.
+1. Finish fingerprint compatibility scoring.
+2. Ingest real CV files.
+3. Generate fingerprints from those CVs.
+4. Ingest portfolio/GitHub evidence.
+5. Test against a benchmark set of real job descriptions.
+6. Build the first global job discovery adapters.
+7. Add ranking and CV selection.
+8. Add application preparation.
+9. Add approval-controlled application automation.
