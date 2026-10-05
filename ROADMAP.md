@@ -68,16 +68,16 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Scheduled discovery
 
 ### Phase 4 — Intelligent Ranking
-**Status: PLANNED**
+**Status: IN PROGRESS**
 
-- [ ] Fast fingerprint retrieval
-- [ ] Vector/semantic retrieval
-- [ ] LLM deep evaluation
-- [ ] Multi-stage ranking
-- [ ] Opportunity quality score
-- [ ] Scam/fraud signals
-- [ ] Salary quality score
-- [ ] Application effort score
+- [x] Fast fingerprint retrieval
+- [x] Vector/semantic retrieval
+- [x] Deep evaluation interface + deterministic fallback
+- [x] Multi-stage ranking
+- [x] Opportunity quality score
+- [x] Scam/fraud signals
+- [x] Salary quality score
+- [x] Application effort score
 
 ### Phase 5 — CV & Application Intelligence
 **Status: PLANNED**
