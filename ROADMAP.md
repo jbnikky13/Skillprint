@@ -39,19 +39,19 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Semantic/embedding similarity (provider-backed HTTP embedding interface + cosine similarity)
 - [x] Larger benchmark suite (initial benchmark set + CI)
 
-**Current milestone: 1.9 — Phase 1 Complete**
+**Current milestone: 2.0 — Phase 2 Complete**
 
 ### Phase 2 — Candidate Intelligence
-**Status: IN PROGRESS**
+**Status: COMPLETE**
 
 - [x] CV file ingestion
 - [x] PDF/DOCX text extraction
 - [x] CV fingerprint generation
-- [ ] Portfolio ingestion
-- [ ] GitHub repository analysis
-- [ ] Evidence graph
-- [ ] Career skill graph
-- [ ] Candidate fingerprint versioning
+- [x] Portfolio ingestion
+- [x] GitHub repository analysis
+- [x] Evidence graph
+- [x] Career skill graph
+- [x] Candidate fingerprint versioning
 
 ### Phase 3 — Global Job Discovery
 **Status: PLANNED**
