@@ -21,7 +21,7 @@ export class ApplicationAgent {
   async execute(task: ApplicationTask,browser:ApplicationBrowser):Promise<{submission:ApplicationSubmission;audit:AuditRecord[]}> {
     const decision=evaluatePolicy(task,this.policy);
     if(!decision.allowed) { task.state="blocked"; return {submission:{accepted:false,message:decision.reasons.join(" ")},audit:[audit(task,"blocked",decision.reasons.join(" "))]}; }
-    if(task.mode==="approval" && task.state!=="approved" as never) {
+    if(task.mode==="approval" && task.state!=="approved") {
       task.state="awaiting_approval";
       return {submission:{accepted:false,message:"Approval is required before submission."},audit:[audit(task,"approval_required")]};
     }
