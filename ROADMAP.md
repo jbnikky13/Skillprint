@@ -36,17 +36,17 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Years-of-experience compatibility
 - [x] Salary compatibility
 - [x] Work-authorization compatibility
-- [ ] Semantic/embedding similarity
-- [ ] Larger benchmark suite
+- [ ] Semantic/embedding similarity (provider-backed; terminology similarity prototype added)
+- [x] Larger benchmark suite (initial benchmark set + CI)
 
-**Current milestone: 1.7 — Compatibility Scoring**
+**Current milestone: 1.8 — Benchmark + Semantic Foundation**
 
 ### Phase 2 — Candidate Intelligence
-**Status: NEXT**
+**Status: IN PROGRESS**
 
-- [ ] CV file ingestion
-- [ ] PDF/DOCX text extraction
-- [ ] CV fingerprint generation
+- [x] CV file ingestion
+- [x] PDF/DOCX text extraction
+- [x] CV fingerprint generation
 - [ ] Portfolio ingestion
 - [ ] GitHub repository analysis
 - [ ] Evidence graph
@@ -127,7 +127,7 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 ## Immediate build sequence
 
 1. Finish fingerprint compatibility scoring. **DONE**
-2. Ingest real CV files.
+2. Ingest real CV files. **DONE**
 3. Generate fingerprints from those CVs.
 4. Ingest portfolio/GitHub evidence.
 5. Test against a benchmark set of real job descriptions.
