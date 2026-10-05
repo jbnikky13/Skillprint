@@ -23,3 +23,6 @@ export * from "./agent/index.js";
 export * from "./command-center/index.js";
 
 export * from "./product/index.js";
+
+export * from "./profile/personal.js";
+export * from "./profile/job-search.js";
