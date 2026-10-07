@@ -1,4 +1,7 @@
 const seed={opportunities:[],applications:[],interviews:[],offers:[],archive:[]};
+const SUPABASE_URL="https://ofdvgipsgfrmgqezabgy.supabase.co";
+const SUPABASE_KEY=window.SKILLPRINT_SUPABASE_KEY||"";
+async function loadLiveJobs(){if(!SUPABASE_KEY)return;try{const r=await fetch(SUPABASE_URL+"/rest/v1/jobs?select=id,title,company,location,remote,url,score,recommended_cv_id,reasons,source&order=score.desc&limit=50",{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY}});if(!r.ok)return;const jobs=await r.json();data.opportunities=jobs.map(j=>({id:j.id,title:j.title,company:j.company||"Unknown",location:j.location||"Remote",remote:j.remote,url:j.url,score:Number(j.score||0),matchScore:Number(j.score||0),cv:j.recommended_cv_id||"CV pending",source:j.source,reasons:Array.isArray(j.reasons)?j.reasons:[]}));save();view(document.querySelector(".nav.active")?.dataset.view||"overview");$("#status").textContent="Live matches · "+jobs.length+" opportunities";}catch(e){$("#status").textContent="Dashboard offline · cached data shown";}}
 const data=JSON.parse(localStorage.getItem("skillprint-dashboard")||"null")||seed;
 const save=()=>localStorage.setItem("skillprint-dashboard",JSON.stringify(data));
 const $=s=>document.querySelector(s);
@@ -11,4 +14,4 @@ function view(name){const title={overview:"Your job hunt, in one place.",opportu
 window.saveJob=id=>{const j=data.opportunities.find(x=>x.id===id);if(j){j.stage="saved";save();view("opportunities")}}
 window.showArchive=id=>{const a=data.archive.find(x=>x.id===id);if(!a)return;$("#dialogTitle").textContent=a.title;$("#dialogBody").textContent=[`Company: ${a.company}`,`Submitted: ${a.submittedAt}`,`Application URL: ${a.url}`,`CV used: ${a.cv} (${a.cvId})`,`Status: ${a.status}`,`\n--- COVER LETTER ---\n${a.coverLetter||""}`,`\n--- ANSWERS ---\n${(a.answers||[]).map(x=>x[0]+": "+x[1]).join("\n")}`].join("\n");$("#archiveDialog").showModal()};
 document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");view(b.dataset.view)});
-$("#refresh").onclick=()=>view(document.querySelector(".nav.active").dataset.view);$("#closeDialog").onclick=()=>$("#archiveDialog").close();view("overview");
+$("#refresh").onclick=()=>view(document.querySelector(".nav.active").dataset.view);$("#closeDialog").onclick=()=>$("#archiveDialog").close();view("overview");loadLiveJobs();
