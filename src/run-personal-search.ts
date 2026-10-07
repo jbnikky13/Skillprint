@@ -15,6 +15,8 @@ const query = {
 const discovered = await discoverJobsWithFailures(defaultLiveSources(), query);
 const ranked = await rankOpportunities(personalCandidate, discovered.jobs, { maxCandidates: 100 });
 const personal = matchPersonalJobs(ranked.map((item) => item.job), defaultPersonalPreferences);
+const eligibleIds = new Set(personal.filter((item) => item.eligible).map((item) => item.job.id));
+const eligibleRanked = ranked.filter((item) => eligibleIds.has(item.job.id));
 await syncRankedJobs(eligibleRanked);
 const byId = new Map(ranked.map((item) => [item.job.id, item]));
 
