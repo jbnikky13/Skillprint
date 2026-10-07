@@ -54,9 +54,9 @@ The job-ingestion, browser automation, application generation and dashboard laye
 
 ## Status
 
-Early development — Phase 1: Fingerprint Engine
+Engineering status: Phases 0–8 are implemented at the code layer; v1.0 productization is code-complete, with deployment-specific credentials/providers and verified site workflows remaining.
 
-See ROADMAP.md for the project plan.
+See ROADMAP.md for the current product and engineering plan.
 
 ## License
 
