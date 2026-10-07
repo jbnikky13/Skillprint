@@ -3,6 +3,7 @@ import { supabase } from "./supabase.js";
 
 export async function syncRankedJobs(items: RankedOpportunity[]) {
   if (!items.length) return { inserted: 0 };
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY) return { inserted: 0, skipped: true };
   const rows = items.map(({ job, finalScore, rankReasons }) => ({
     external_id: job.externalId ?? job.id,
     source: job.source,
