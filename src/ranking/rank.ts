@@ -7,11 +7,7 @@ import { scamRisk } from "./scam.js";
 import { createRuleBasedDeepEvaluator } from "./deep.js";
 import type { RankedOpportunity, RankingOptions } from "./types.js";
 
-export async function rankOpportunities(
-  candidate: CareerFingerprint,
-  jobs: NormalizedJob[],
-  options: RankingOptions = {}
-): Promise<RankedOpportunity[]> {
+export async function rankOpportunities(candidate: CareerFingerprint, jobs: NormalizedJob[], options: RankingOptions = {}): Promise<RankedOpportunity[]> {
   const max = options.maxCandidates ?? jobs.length;
   const base = jobs.map((job) => ({ job, match: matchFingerprints(candidate, job.fingerprint) }))
     .filter((x) => x.match.eligible)
@@ -38,8 +34,9 @@ export async function rankOpportunities(
       salaryScore * 0.03 +
       effortScore * 0.02
     ) * 10) / 10;
+    const rankedJob: NormalizedJob = { ...item.job, matchScore: finalScore };
     ranked.push({
-      job: item.job,
+      job: rankedJob,
       match: item.match,
       semanticScore,
       qualityScore,
@@ -48,10 +45,10 @@ export async function rankOpportunities(
       effortScore,
       finalScore,
       rankReasons: [
-        `Fingerprint match: ${item.match.score}%.`,
-        `Opportunity quality: ${qualityScore}%.`,
-        `Scam safety: ${100 - scamScore}%.`,
-        `Application effort score: ${effortScore}%.`,
+        "Fingerprint match: " + item.match.score + "%.",
+        "Opportunity quality: " + qualityScore + "%.",
+        "Scam safety: " + (100 - scamScore) + "%.",
+        "Application effort score: " + effortScore + "%.",
         ...deepResult.reasons
       ]
     });
