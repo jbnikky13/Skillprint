@@ -26,6 +26,9 @@ jobs:
 
       - name: Run personal job search
         run: npm run search > skillprint-job-results.json
+        env:
+          SUPABASE_URL: https://ofdvgipsgfrmgqezabgy.supabase.co
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SKILLPRINT_SUPABASE_PUBLISHABLE_KEY }}
 
       - name: Upload job results
         uses: actions/upload-artifact@v4
