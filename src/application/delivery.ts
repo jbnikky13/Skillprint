@@ -18,8 +18,13 @@ export function browserDelivery():ApplicationDelivery{
     canHandle:task=>Boolean(task.job.url),
     async submit(task,browser){
       await browser.open(task.job.url);
-      const result=await browser.click("application-form").then(()=>({accepted:false,message:"Site workflow required before submission."})).catch(error=>({accepted:false,message:error instanceof Error?error.message:String(error)}));
-      return result;
+      return {accepted:false,message:"Application site opened. Interactive form completion is required before submission."};
     }
   };
+}
+
+export function safeDeliveryRegistry():DeliveryRegistry{
+  const registry=new DeliveryRegistry();
+  registry.register(browserDelivery());
+  return registry;
 }
