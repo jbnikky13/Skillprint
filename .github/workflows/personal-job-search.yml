@@ -1,0 +1,35 @@
+name: Skillprint Personal Job Search
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Run personal job search
+        run: npm run search > skillprint-job-results.json
+
+      - name: Upload job results
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillprint-job-results-${{ github.run_number }}
+          path: skillprint-job-results.json
+          retention-days: 14
