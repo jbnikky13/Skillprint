@@ -31,4 +31,6 @@ export interface NormalizedJob extends RawJob {
   fingerprint: CareerFingerprint;
   discoveredAt: string;
   status: "active" | "expired" | "unknown";
+  /** Latest computed match/ranking score when a job has been ranked for a candidate. */
+  matchScore?: number;
 }
