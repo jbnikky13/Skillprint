@@ -3,6 +3,7 @@ import { discoverJobsWithFailures } from "./jobs/discovery.js";
 import { rankOpportunities } from "./ranking/rank.js";
 import { matchPersonalJobs, defaultPersonalPreferences } from "./profile/job-search.js";
 import { personalCandidate } from "./profile/personal.js";
+import { syncRankedJobs } from "./db/sync.js";
 
 const query = {
   keywords: defaultPersonalPreferences.preferredRoles,
@@ -14,6 +15,7 @@ const query = {
 const discovered = await discoverJobsWithFailures(defaultLiveSources(), query);
 const ranked = await rankOpportunities(personalCandidate, discovered.jobs, { maxCandidates: 100 });
 const personal = matchPersonalJobs(ranked.map((item) => item.job), defaultPersonalPreferences);
+await syncRankedJobs(eligibleRanked);
 const byId = new Map(ranked.map((item) => [item.job.id, item]));
 
 const results = personal.filter((item) => item.eligible).slice(0, 25).map((item, index) => {
