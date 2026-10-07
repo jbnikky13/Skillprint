@@ -1,0 +1,3 @@
+import { createClient } from "@supabase/supabase-js";
+function db(){const u=process.env.SUPABASE_URL,k=process.env.SUPABASE_PUBLISHABLE_KEY;if(!u||!k)throw new Error("Database is not configured.");return createClient(u,k,{auth:{persistSession:false}});}
+export default async function handler(req,res){if(req.method!=="GET")return res.status(405).json({error:"Method not allowed"});try{const s=db();const {data,error}=await s.from("application_archive").select("id,application_id,job_id,title,company,url,cv_id,cv_name,cover_letter,answers,status,submitted_at").order("submitted_at",{ascending:false});if(error)throw error;return res.status(200).json({archive:data||[]});}catch(e){return res.status(500).json({error:e instanceof Error?e.message:String(e)});}}
