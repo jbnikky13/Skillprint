@@ -5,3 +5,4 @@ export * from "./expiry.js";
 export * from "./discovery.js";
 export * from "./sources/index.js";
 export * from "./scheduler.js";
+export * from "./live-sources.js";
