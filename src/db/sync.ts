@@ -1,9 +1,12 @@
+import { createClient } from "@supabase/supabase-js";
 import type { RankedOpportunity } from "../ranking/types.js";
-import { supabase } from "./supabase.js";
 
 export async function syncRankedJobs(items: RankedOpportunity[]) {
   if (!items.length) return { inserted: 0 };
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY) return { inserted: 0, skipped: true };
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  if (!url || !key) return { inserted: 0, skipped: true };
+  const supabase = createClient(url, key, { auth: { persistSession: false } });
   const rows = items.map(({ job, finalScore, rankReasons }) => ({
     external_id: job.externalId ?? job.id,
     source: job.source,
@@ -20,5 +23,5 @@ export async function syncRankedJobs(items: RankedOpportunity[]) {
   }));
   const { error } = await supabase.from("jobs").upsert(rows, { onConflict: "source,external_id" });
   if (error) throw error;
-  return { inserted: rows.length };
+  return { inserted: rows.length, skipped: false };
 }
