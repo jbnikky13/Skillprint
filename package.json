@@ -11,7 +11,9 @@
     "benchmark": "npm run build && node --test test/benchmark.test.js test/embeddings.test.js",
     "check": "npm run typecheck && npm test",
     "smoke": "npm run build && node dist/smoke.js",
-    "search": "npm run build && node dist/run-personal-search.js"
+    "search": "npm run build && node dist/run-personal-search.js",
+    "start": "node dist/product/server.js",
+    "dev": "node --watch dist/product/server.js"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
