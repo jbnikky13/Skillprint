@@ -1,6 +1,6 @@
 import { createServer } from "node:http";
 import { CareerCommandCenter } from "../command-center/store.js";
-import { SupabaseUserRepository, MemoryUserRepository, type UserRepository } from "./persistence.js";
+import { SupabaseUserRepository, MemoryUserRepository, defaultPersistedUser, type UserRepository } from "./persistence.js";
 import { DevAuthProvider } from "./auth.js";
 import { dashboardHTML, handleProductRequest } from "./http.js";
 
