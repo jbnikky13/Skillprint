@@ -1,0 +1,1 @@
+import test from "node:test";import assert from "node:assert/strict";test("production E2E runner defaults to read-only mode",()=>{assert.equal(process.env.SKILLPRINT_ALLOW_LIVE_SUBMIT,"true",false);});
