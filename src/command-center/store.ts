@@ -7,6 +7,7 @@ const id=(prefix:string)=>prefix+"-"+Date.now()+"-"+Math.random().toString(36).s
 
 export class CareerCommandCenter {
   private data:CommandCenterSnapshot={opportunities:[],applications:[],interviews:[],offers:[],messages:[],notifications:[]};
+  constructor(snapshot?:CommandCenterSnapshot){if(snapshot)this.data=structuredClone(snapshot);}
 
   ingest(opportunities:RankedOpportunity[]):OpportunityRecord[]{
     return opportunities.map(r=>{const existing=this.data.opportunities.find(x=>x.id===r.job.id);
