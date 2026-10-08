@@ -138,17 +138,19 @@ Build a global career agent that continuously discovers opportunities, fingerpri
 - [x] Connect production email/status ingestion boundary
 - [x] Connect verified site-specific workflow framework (site configs required per target)
 
-## Immediate build sequence
+## Remaining build work
 
-1. Finish fingerprint compatibility scoring. **DONE**
-2. Ingest real CV files. **DONE**
-3. Generate fingerprints from those CVs. **DONE**
-4. Ingest portfolio/GitHub evidence.
-5. Test against a benchmark set of real job descriptions.
-6. Build the first global job discovery adapters.
-7. Add ranking and CV selection.
-8. Add application preparation.
-9. Add approval-controlled application automation.
+All numbered product phases (0–8) are complete at the code layer. The remaining work is **productionization and deployment**, not another numbered phase.
+
+1. **Production persistence** — connect the provider-neutral repository boundary to the production database.
+2. **Production authentication** — replace the development auth provider with the selected production identity provider.
+3. **Live mailbox integration** — connect the email/status-ingestion boundary to the user's real mailbox with OAuth.
+4. **Verified site workflows** — add and test site-specific browser selectors/workflows for each target ATS. Unknown/unverified sites must remain blocked.
+5. **Production dashboard/API deployment** — expose the command center and API through the chosen production application/runtime.
+6. **Operational hardening** — monitoring, retries, rate-limit handling, secret management, audit-log retention, and deployment smoke tests.
+7. **End-to-end personal job hunter** — run discovery → ranking → CV selection → application preparation → approval/submission against real deployment credentials.
+
+These items deliberately remain outside the repository's deterministic core until deployment-specific credentials, providers, and verified site workflows are supplied.
 
 
 ## Deployment-only requirements
