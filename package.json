@@ -13,7 +13,8 @@
     "smoke": "npm run build && node dist/smoke.js",
     "search": "npm run build && node dist/run-personal-search.js",
     "start": "node dist/product/server.js",
-    "dev": "node --watch dist/product/server.js"
+    "dev": "node --watch dist/product/server.js",
+    "sync:gmail": "npm run build && node dist/run-gmail-sync.js"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
