@@ -1,6 +1,8 @@
 import { dashboardView } from "./dashboard.js";
 import type { CareerCommandCenter } from "../command-center/store.js";
 import type { AuthProvider } from "./auth.js";
+import { createGmailAuthorizationUrl, createGmailState, exchangeGmailCode, gmailProfile, verifyGmailState, refreshGmailAccessToken, listGmailMessages, getGmailMessage, classifyGmailMessage } from "./gmail.js";
+import type { GmailConnectionRepository } from "./gmail-repository.js";
 
 export interface HTTPRequest { method:string; path:string; headers?:Record<string,string|undefined>; body?:unknown; }
 export interface HTTPResponse { status:number; headers:Record<string,string>; body:string; }
@@ -9,7 +11,7 @@ const json=(status:number,value:unknown):HTTPResponse=>({status,headers:{"conten
 
 export async function handleProductRequest(
  req:HTTPRequest,
- deps:{auth:AuthProvider; center:(accountId:string, identity?:{accountId:string;email:string;role:"candidate"|"recruiter"|"company"|"admin"})=>Promise<CareerCommandCenter>}
+ deps:{auth:AuthProvider; center:(accountId:string, identity?:{accountId:string;email:string;role:"candidate"|"recruiter"|"company"|"admin"})=>Promise<CareerCommandCenter>; gmail?:GmailConnectionRepository}
 ):Promise<HTTPResponse>{
  if(req.method==="GET"&&req.path==="/health")return json(200,{ok:true,service:"skillprint"});
  if(req.method==="GET"&&req.path==="/api/dashboard"){
@@ -18,6 +20,25 @@ export async function handleProductRequest(
    const identity=await deps.auth.verify(token);
    if(!identity)return json(401,{error:"Invalid session"});
    return json(200,dashboardView(await deps.center(identity.accountId,identity)));
+ }
+ if(req.method==="GET"&&req.path==="/api/gmail/connect"){
+   const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");if(!token)return json(401,{error:"Authentication required"});
+   const identity=await deps.auth.verify(token);if(!identity)return json(401,{error:"Invalid session"});
+   if(!deps.gmail)return json(503,{error:"Gmail integration is not configured"});
+   try{return json(200,{authorizationUrl:createGmailAuthorizationUrl(createGmailState(identity.accountId))})}catch(e){return json(503,{error:e instanceof Error?e.message:"Gmail OAuth is not configured"})}
+ }
+ if(req.method==="GET"&&req.path==="/api/gmail/callback"){return json(400,{error:"Use the OAuth callback handler with query parameters"})}
+ if(req.method==="POST"&&req.path==="/api/gmail/sync"){
+   const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");if(!token)return json(401,{error:"Authentication required"});
+   const identity=await deps.auth.verify(token);if(!identity||!deps.gmail)return json(401,{error:"Invalid session"});
+   let c=await deps.gmail.get(identity.accountId);if(!c||!c.accessToken)return json(409,{error:"Gmail is not connected"});
+   try{
+     if(c.tokenExpiresAt&&new Date(c.tokenExpiresAt).getTime()<Date.now()+60000&&c.refreshToken){const fresh=await refreshGmailAccessToken(c.refreshToken);c.accessToken=fresh.accessToken;c.tokenExpiresAt=fresh.expiresAt;await deps.gmail.save(c);}
+     const listed=await listGmailMessages(c.accessToken,"newer_than:30d (application OR interview OR assessment OR offer OR rejection)",50);
+     const messages=[];for(const item of listed.messages??[]){const msg=await getGmailMessage(c.accessToken,item.id);const status=classifyGmailMessage(msg);if(status!=="unknown")messages.push({id:msg.id,threadId:msg.threadId,status,subject:msg.headers.subject??"",from:msg.headers.from??"",date:msg.headers.date??"",snippet:msg.snippet??""});}
+     const profile=await gmailProfile(c.accessToken);c.email=profile.emailAddress;c.googleSub=profile.emailAddress;c.historyId=profile.historyId;c.lastSyncAt=new Date().toISOString();c.status="connected";await deps.gmail.save(c);
+     return json(200,{email:c.email,scanned:listed.messages?.length??0,events:messages,syncedAt:c.lastSyncAt});
+   }catch(e){c.status="error";await deps.gmail.save(c);return json(502,{error:e instanceof Error?e.message:"Gmail sync failed"})}
  }
  if(req.method==="GET"&&req.path==="/api/me"){
    const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");
