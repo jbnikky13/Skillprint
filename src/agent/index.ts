@@ -19,3 +19,4 @@ export * from "./approval-preview.js";
 
 export * from "./approval-coordinator.js";
 export * from "./pre-submit-guard.js";
+export * from "./application-record.js";
