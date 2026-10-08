@@ -33,6 +33,15 @@ export class CareerCommandCenter {
   ingestMessage(message:Omit<StatusMessage,"id">):StatusMessage{const existing=message.externalId?this.data.messages.find(x=>x.externalId===message.externalId):undefined;if(existing)return existing;const r={...message,id:id("msg")};this.data.messages.push(r);return r;}
   notify(input:Omit<Notification,"id"|"createdAt"|"read">):Notification{const r={...input,id:id("note"),createdAt:now(),read:false};this.data.notifications.push(r);return r;}
   markNotificationRead(id:string):void{const n=this.data.notifications.find(x=>x.id===id);if(n)n.read=true;}
+  analytics():import("./types.js").CommandCenterAnalytics{
+    const applications=this.data.applications.length, interviews=this.data.interviews.length, offers=this.data.offers.length;
+    const applied=this.data.applications.filter(a=>a.appliedAt||a.state==="submitted").length;
+    const responded=this.data.messages.filter(m=>m.kind==="application_status"||m.kind==="interview"||m.kind==="rejection"||m.kind==="offer").length;
+    const scores=this.data.opportunities.map(o=>o.ranked?.score).filter((x):x is number=>typeof x==="number");
+    return {activeOpportunities:this.data.opportunities.filter(o=>!["archived","rejected"].includes(o.stage)).length,saved:this.data.opportunities.filter(o=>o.stage==="saved").length,applications,interviews,offers,responseRate:applications?Math.min(1,responded/applications):0,interviewRate:applied?Math.min(1,interviews/applied):0,offerRate:applied?Math.min(1,offers/applied):0,averageMatchScore:scores.length?scores.reduce((a,b)=>a+b,0)/scores.length:0,pendingApplications:this.data.applications.filter(a=>["queued","ready","approved"].includes(a.state)).length};
+  }
+  unreadNotifications(){return this.data.notifications.filter(n=>!n.read).map(n=>structuredClone(n));}
+  notificationSummary(){const unread=this.unreadNotifications();return {unreadCount:unread.length,byType:unread.reduce((a,n)=>(a[n.type]=(a[n.type]??0)+1,a),{} as Record<string,number>),latest:unread.sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,10)};}
   snapshot():CommandCenterSnapshot{return structuredClone(this.data);}
   private requireJob(jobId:string){const r=this.data.opportunities.find(x=>x.id===jobId);if(!r)throw new Error("Opportunity not found: "+jobId);return r;}
 }
