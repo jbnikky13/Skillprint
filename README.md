@@ -54,7 +54,7 @@ The job-ingestion, browser automation, application generation and dashboard laye
 
 ## Status
 
-Engineering status: Phases 0–8 are implemented at the code layer; v1.0 productization is code-complete, with deployment-specific credentials/providers and verified site workflows remaining.
+Engineering status: Phases 0–8 are implemented at the code layer. The remaining work is productionization: live persistence/auth, mailbox OAuth, deployed dashboard/API, verified site-specific workflows, and operational hardening.
 
 See ROADMAP.md for the current product and engineering plan.
 
