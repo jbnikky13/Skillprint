@@ -44,6 +44,16 @@ const snapshot=center.snapshot();
 return json(200,{email:c.email,scanned:listed.messages?.length??0,classified:messages.length,events,syncedAt:c.lastSyncAt});
    }catch(e){c.status="error";await deps.gmail.save(c);return json(502,{error:e instanceof Error?e.message:"Gmail sync failed"})}
  }
+ if(req.method==="GET"&&req.path==="/api/career/analytics"){
+   const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");if(!token)return json(401,{error:"Authentication required"});
+   const identity=await deps.auth.verify(token);if(!identity)return json(401,{error:"Invalid session"});
+   const center=await deps.center(identity.accountId,identity);return json(200,{analytics:center.analytics(),notifications:center.notificationSummary()});
+ }
+ if(req.method==="POST"&&req.path==="/api/career/notifications/read"){
+   const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");if(!token)return json(401,{error:"Authentication required"});
+   const identity=await deps.auth.verify(token);if(!identity)return json(401,{error:"Invalid session"});
+   const center=await deps.center(identity.accountId,identity);const body=(req as any).body as {id?:string};if(!body?.id)return json(400,{error:"Notification id required"});center.markNotificationRead(body.id);return json(200,{ok:true,notifications:center.notificationSummary()});
+ }
  if(req.method==="GET"&&req.path==="/api/me"){
    const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");
    if(!token)return json(401,{error:"Authentication required"});
