@@ -1,0 +1,3 @@
+import type {BrowserDriver,BrowserPageSnapshot} from "./browser.js";import {planGreenhouseFields,type GreenhouseField} from "./greenhouse.js";
+export interface GreenhouseInspection{url:string;title:string;fields:GreenhouseField[];unknownRequired:string[];knownRequired:string[];readyForPreparation:boolean}
+export async function inspectGreenhouseJob(browser:BrowserDriver,url:string):Promise<GreenhouseInspection>{await browser.open(url);const snap:BrowserPageSnapshot=await browser.snapshot();const plan=planGreenhouseFields(snap.fields);const knownRequired=plan.fields.filter(f=>f.required&&f.kind!=="unknown").map(f=>f.label);return{url:snap.url,title:snap.title,fields:plan.fields,unknownRequired:plan.blocked,knownRequired,readyForPreparation:plan.blocked.length===0};}
