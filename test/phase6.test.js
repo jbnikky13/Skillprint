@@ -1,12 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ApplicationAgent } from "../dist/agent/index.js";
+import { ApplicationAgent, WorkflowRegistry } from "../dist/agent/index.js";
 import { prepareApplication } from "../dist/application/index.js";
 import { cvProfiles } from "../dist/cv/profiles.js";
 
 const candidate={version:1,kind:"candidate",title:"AI Data",skills:[{name:"data-annotation",weight:1,evidence:"demonstrated"}],tools:[],domains:[{name:"ai",weight:1,evidence:"demonstrated"}],roles:[{name:"ai-evaluator",weight:1,evidence:"demonstrated"}],locations:["Nigeria"],remoteEligible:true,evidence:[{source:"work",description:"Data annotation",signals:["data-annotation"]}]};
 const job={id:"job-6",title:"AI Evaluator",description:"Evaluate AI data",url:"https://example.com/job",company:"Example",source:"test",discoveredAt:new Date().toISOString(),status:"active",fingerprint:{version:1,kind:"job",title:"AI Evaluator",skills:[{name:"data-annotation",weight:1,evidence:"verified",requirement:"required"}],tools:[],domains:[{name:"ai",weight:1,evidence:"verified"}],roles:[{name:"ai-evaluator",weight:1,evidence:"verified"}],locations:[],remoteEligible:true,remoteScope:"worldwide"}};
 const opportunity={job,match:{score:90,eligible:true,confidence:.9,matched:["data-annotation"],missing:[],reasons:[],breakdown:{skills:100,tools:100,domains:100,roles:100,seniority:100,experience:100,salary:100,authorization:100}},semanticScore:.9,qualityScore:90,scamScore:0,salaryQualityScore:50,effortScore:100,finalScore:91,rankReasons:[]};
+test("specialized workflows take precedence over generic fallback",()=>{const r=new WorkflowRegistry();const generic={name:"generic",canHandle:()=>true,run:async()=>({accepted:false})};const specialized={name:"specialized",canHandle:()=>true,run:async()=>({accepted:true})};r.register(generic);r.register(specialized);assert.equal(r.resolve({url:"https://example.com"}).name,"specialized");});
 test("approval mode fails closed",()=>{const pkg=prepareApplication(candidate,cvProfiles,opportunity);const agent=new ApplicationAgent();const task=agent.createTask(job,pkg,"approval");assert.equal(task.state,"awaiting_approval");});
 test("manual planning produces an audit decision",()=>{const pkg=prepareApplication(candidate,cvProfiles,opportunity);const agent=new ApplicationAgent();const task=agent.createTask(job,pkg,"manual");const events=agent.plan(task);assert.equal(events[0].event,"policy_checked");});
 test("blocked claims prevent execution",async()=>{const pkg=prepareApplication(candidate,cvProfiles,opportunity);pkg.truthReport.valid=false;const agent=new ApplicationAgent();const task=agent.createTask(job,pkg,"manual");const result=await agent.execute(task,{open:async()=>{},fill:async()=>{},upload:async()=>{},click:async()=>{},submit:async()=>{}});assert.equal(result.submission.accepted,false);assert.equal(task.state,"blocked");});
