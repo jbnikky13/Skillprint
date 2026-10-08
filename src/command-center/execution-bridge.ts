@@ -1,0 +1,3 @@
+import type {ApplicationTask,ApplicationSubmission} from "../agent/types.js";import {recordSubmission,type ExecutionRecord} from "../agent/application-record.js";import type {CareerCommandCenter} from "./store.js";
+export interface CommandCenterExecutionResult{record:ExecutionRecord;applicationId:string}
+export function recordExecutionResult(center:CareerCommandCenter,task:ApplicationTask,result:ApplicationSubmission):CommandCenterExecutionResult{const execution=recordSubmission(task,result);const application=center.recordApplication({...task,state:execution.state});const updated=center.updateApplication(application.id,execution.state,execution.message);return{record:execution,applicationId:updated.id};}
