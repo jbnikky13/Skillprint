@@ -12,6 +12,7 @@ export class GmailConnectionRepository{
   if(!url||!key)throw new Error("Supabase server credentials are required");
   this.client=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
  }
+ async list():Promise<GmailConnection[]>{const {data,error}=await this.client.from("skillprint_gmail_connections").select("*").eq("status","connected");if(error)throw new Error(error.message);return (data??[]).map(data=>({accountId:data.account_id,googleSub:data.google_sub,email:data.email,accessToken:open(data.access_token),refreshToken:open(data.refresh_token),tokenExpiresAt:data.token_expires_at??undefined,scope:data.scope,historyId:data.history_id??undefined,lastSyncAt:data.last_sync_at??undefined,status:data.status}));}
  async get(accountId:string):Promise<GmailConnection|undefined>{
   const {data,error}=await this.client.from("skillprint_gmail_connections").select("*").eq("account_id",accountId).maybeSingle();
   if(error)throw new Error(error.message);if(!data)return undefined;
