@@ -18,3 +18,4 @@ export * from "./greenhouse-inspector.js";
 export * from "./approval-preview.js";
 
 export * from "./approval-coordinator.js";
+export * from "./pre-submit-guard.js";
