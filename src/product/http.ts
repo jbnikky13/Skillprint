@@ -17,7 +17,7 @@ export async function handleProductRequest(
    if(!token)return json(401,{error:"Authentication required"});
    const identity=await deps.auth.verify(token);
    if(!identity)return json(401,{error:"Invalid session"});
-   return json(200,dashboardView(deps.center(identity.accountId)));
+   return json(200,dashboardView(await deps.center(identity.accountId)));
  }
  if(req.method==="GET"&&req.path==="/api/me"){
    const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");
