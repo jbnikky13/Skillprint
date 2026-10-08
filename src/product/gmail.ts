@@ -54,6 +54,10 @@ export async function gmailProfile(accessToken:string){
  return googleJson("https://gmail.googleapis.com/gmail/v1/users/me/profile",accessToken) as Promise<{emailAddress:string;historyId:string;messagesTotal:number;threadsTotal:number}>;
 }
 
+export async function listGmailHistory(accessToken:string,startHistoryId:string,maxResults=100){
+ const u=new URL("https://gmail.googleapis.com/gmail/v1/users/me/history");u.searchParams.set("startHistoryId",startHistoryId);u.searchParams.set("historyTypes","messageAdded");u.searchParams.set("maxResults",String(Math.min(maxResults,500)));
+ return googleJson(u.toString(),accessToken) as Promise<{history?:Array<{messagesAdded?:Array<{message:{id:string;threadId:string}}>}>;historyId?:string;nextPageToken?:string}>;
+}
 export async function listGmailMessages(accessToken:string,q:string,maxResults=50){
  const u=new URL("https://gmail.googleapis.com/gmail/v1/users/me/messages");u.searchParams.set("q",q);u.searchParams.set("maxResults",String(Math.min(maxResults,500)));
  return googleJson(u.toString(),accessToken) as Promise<{messages?:{id:string;threadId:string}[];nextPageToken?:string;resultSizeEstimate?:number}>;
