@@ -40,5 +40,8 @@ jobs:
       - name: Greenhouse read-only smoke
         run: npm run greenhouse:smoke
 
+      - name: Greenhouse end-to-end read-only dry run
+        run: npm run greenhouse:e2e:dry-run
+
       - name: Benchmark
         run: npm run benchmark
