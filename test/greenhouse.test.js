@@ -1,0 +1,3 @@
+import test from "node:test";import assert from "node:assert/strict";import {classifyGreenhouseField,planGreenhouseFields} from "../dist/agent/greenhouse.js";
+test("classifies known Greenhouse fields",()=>{assert.equal(classifyGreenhouseField("Email"),"email");assert.equal(classifyGreenhouseField("Resume/CV"),"resume");assert.equal(classifyGreenhouseField("Phone number"),"phone")});
+test("quarantines unknown required fields",()=>{const p=planGreenhouseFields([{label:"Email",selector:"#email",required:true},{label:"Why should we hire you?",selector:"#why",required:true}]);assert.deepEqual(p.blocked,["Why should we hire you?"])});
