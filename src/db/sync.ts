@@ -4,7 +4,7 @@ import type { RankedOpportunity } from "../ranking/types.js";
 export async function syncRankedJobs(items: RankedOpportunity[]) {
   if (!items.length) return { inserted: 0 };
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return { inserted: 0, skipped: true };
   const supabase = createClient(url, key, { auth: { persistSession: false } });
   const rows = items.map(({ job, finalScore, rankReasons }) => ({
