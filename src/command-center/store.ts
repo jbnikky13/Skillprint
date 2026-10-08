@@ -24,12 +24,13 @@ export class CareerCommandCenter {
     const record:ApplicationRecord={id:id("app"),jobId:task.job.id,taskId:task.id,state:task.state,lastStatusAt:now()};
     this.data.applications.push(record); const job=this.requireJob(task.job.id); job.stage=task.state==="submitted"?"applied":"queued"; job.updatedAt=now(); return record;
   }
+  findApplicationById(id:string){return this.data.applications.find(x=>x.id===id);}
   updateApplication(id:string,state:ApplicationRecord["state"],notes?:string):ApplicationRecord{
     const r=this.data.applications.find(x=>x.id===id);if(!r)throw new Error("Application not found");r.state=state;r.lastStatusAt=now();r.notes=notes??r.notes;if(state==="submitted")r.appliedAt=r.appliedAt??now();return r;
   }
   addInterview(input:Omit<InterviewRecord,"id"|"updatedAt">):InterviewRecord{const r={...input,id:id("int"),updatedAt:now()};this.data.interviews.push(r);this.requireJob(input.jobId).stage="interview";return r;}
   addOffer(input:Omit<OfferRecord,"id"|"updatedAt">):OfferRecord{const r={...input,id:id("offer"),updatedAt:now()};this.data.offers.push(r);this.requireJob(input.jobId).stage="offer";return r;}
-  ingestMessage(message:Omit<StatusMessage,"id">):StatusMessage{const r={...message,id:id("msg")};this.data.messages.push(r);return r;}
+  ingestMessage(message:Omit<StatusMessage,"id">):StatusMessage{const existing=message.externalId?this.data.messages.find(x=>x.externalId===message.externalId):undefined;if(existing)return existing;const r={...message,id:id("msg")};this.data.messages.push(r);return r;}
   notify(input:Omit<Notification,"id"|"createdAt"|"read">):Notification{const r={...input,id:id("note"),createdAt:now(),read:false};this.data.notifications.push(r);return r;}
   markNotificationRead(id:string):void{const n=this.data.notifications.find(x=>x.id===id);if(n)n.read=true;}
   snapshot():CommandCenterSnapshot{return structuredClone(this.data);}
