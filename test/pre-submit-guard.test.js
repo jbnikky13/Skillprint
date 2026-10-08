@@ -1,0 +1,6 @@
+import test from "node:test";import assert from "node:assert/strict";import {createApprovalFingerprint,checkBeforeSubmit} from "../dist/agent/pre-submit-guard.js";
+const preview={status:"READY_FOR_APPROVAL",jobId:"j",company:"Acme",title:"Data Annotator",url:"https://boards.greenhouse.io/acme/jobs/1",resumeFile:"/tmp/cv.pdf",coverLetter:"Hello",fields:[{label:"Email",kind:"email",value:"a@example.com",required:true,editable:false}],reviewItems:[]};
+const task={id:"t",job:{id:"j",title:"Data Annotator",company:"Acme",description:"",url:preview.url,status:"active",matchScore:90,fingerprint:{},discoveredAt:new Date().toISOString()},package:{cv:{filePath:"/tmp/cv.pdf"},answers:[]},mode:"approval",state:"approved",createdAt:new Date().toISOString(),attempts:0};
+test("unchanged approved preview is allowed",()=>assert.equal(checkBeforeSubmit(task,createApprovalFingerprint(preview),preview).decision,"ALLOW_SUBMIT"));
+test("changed preview is blocked",()=>{const changed={...preview,coverLetter:"Changed"};const r=checkBeforeSubmit(task,createApprovalFingerprint(preview),changed);assert.equal(r.decision,"BLOCK_SUBMIT");assert.match(r.reason,/re-approval/i)});
+test("non-approved task is blocked",()=>assert.equal(checkBeforeSubmit({...task,state:"awaiting_approval"},createApprovalFingerprint(preview),preview).decision,"BLOCK_SUBMIT"));
