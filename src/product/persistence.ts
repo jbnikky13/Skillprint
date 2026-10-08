@@ -22,6 +22,11 @@ export class MemoryUserRepository implements UserRepository{
 }
 
 const emptyDashboard=():CommandCenterSnapshot=>({opportunities:[],applications:[],interviews:[],offers:[],messages:[],notifications:[]});
+export const defaultPersistedUser=(account:Account):PersistedUser=>{
+  const privacy:PrivacySettings={profileVisibility:"private",allowRecruiterDiscovery:false,allowModelImprovement:false,shareContactAfterMatch:false,dataRetentionDays:365};
+  const subscription:Subscription={accountId:account.id,planId:"free",status:"trialing"};
+  return {account,privacy,subscription,dashboard:emptyDashboard(),updatedAt:new Date().toISOString()};
+};
 
 export class SupabaseUserRepository implements UserRepository{
  private client:SupabaseClient;
@@ -59,9 +64,5 @@ export class SupabaseUserRepository implements UserRepository{
    const {error}=await this.client.from("skillprint_users").delete().eq("account_id",accountId);
    if(error) throw new Error(error.message);
  }
- exportDefaults(account:Account):PersistedUser{
-   const privacy:PrivacySettings={profileVisibility:"private",allowRecruiterDiscovery:false,allowModelImprovement:false,shareContactAfterMatch:false,dataRetentionDays:365};
-   const subscription:Subscription={accountId:account.id,planId:"free",status:"trialing"};
-   return {account,privacy,subscription,dashboard:emptyDashboard(),updatedAt:new Date().toISOString()};
- }
+
 }
