@@ -37,5 +37,8 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Greenhouse read-only smoke
+        run: npm run greenhouse:smoke
+
       - name: Benchmark
         run: npm run benchmark
