@@ -15,3 +15,4 @@ export * from "./executor.js";
 export * from "./playwright-browser.js";
 export * from "./greenhouse-executor.js";
 export * from "./greenhouse-inspector.js";
+export * from "./approval-preview.js";
