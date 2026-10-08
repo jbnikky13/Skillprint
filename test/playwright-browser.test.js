@@ -1,0 +1,1 @@
+import test from "node:test";import assert from "node:assert/strict";import {createPlaywrightBrowserFactory} from "../dist/agent/playwright-browser.js";test("Playwright factory creates a driver without launching",async()=>{const b=await createPlaywrightBrowserFactory().open();assert.equal(typeof b.open,"function");assert.equal(typeof b.snapshot,"function");await b.close()});
