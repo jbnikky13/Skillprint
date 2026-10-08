@@ -14,4 +14,5 @@ export interface CVSelection {
   cvId: string;
   score: number;
   reasons: string[];
+  filePath?: string;
 }
