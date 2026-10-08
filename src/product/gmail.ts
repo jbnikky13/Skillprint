@@ -6,6 +6,9 @@ export interface GmailConnection{accountId:string;googleSub:string;email:string;
 export interface GmailMessage{ id:string;threadId?:string;internalDate?:string;snippet?:string;labelIds?:string[];headers:Record<string,string>;bodyText?:string; }
 
 const enc=(v:string)=>encodeURIComponent(v);
+const oauthStateSecret=()=>process.env.GMAIL_OAUTH_STATE_SECRET??process.env.SUPABASE_SECRET_KEY??process.env.SUPABASE_SERVICE_ROLE_KEY;
+export function createGmailState(accountId:string){const secret=oauthStateSecret();if(!secret)throw new Error("GMAIL_OAUTH_STATE_SECRET is required");const payload=b64url(JSON.stringify({accountId,exp:Date.now()+10*60*1000}));const sig=crypto.createHmac("sha256",secret).update(payload).digest("base64url");return payload+"."+sig;}
+export function verifyGmailState(state:string){const secret=oauthStateSecret();if(!secret)return null;const [payload,sig]=state.split(".");if(!payload||!sig)return null;const expected=crypto.createHmac("sha256",secret).update(payload).digest("base64url");if(!crypto.timingSafeEqual(Buffer.from(sig),Buffer.from(expected)))return null;try{const p=JSON.parse(Buffer.from(payload,"base64url").toString("utf8"));return p.exp>Date.now()?String(p.accountId):null}catch{return null}}
 const b64url=(v:Buffer|string)=>Buffer.from(v).toString("base64url");
 
 export function gmailOAuthConfig(){
@@ -40,6 +43,13 @@ async function googleJson(url:string,token:string,init:RequestInit={}){
  return data;
 }
 
+export async function refreshGmailAccessToken(refreshToken:string){
+ const {clientId,clientSecret}=gmailOAuthConfig();
+ const body=new URLSearchParams({client_id:clientId,client_secret:clientSecret,refresh_token:refreshToken,grant_type:"refresh_token"});
+ const r=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"content-type":"application/x-www-form-urlencoded"},body});
+ const data=await r.json() as {access_token?:string;expires_in?:number;error?:string};if(!r.ok||!data.access_token)throw new Error(data.error??"Google token refresh failed");
+ return {accessToken:data.access_token,expiresAt:new Date(Date.now()+(data.expires_in??3600)*1000).toISOString()};
+}
 export async function gmailProfile(accessToken:string){
  return googleJson("https://gmail.googleapis.com/gmail/v1/users/me/profile",accessToken) as Promise<{emailAddress:string;historyId:string;messagesTotal:number;threadsTotal:number}>;
 }
