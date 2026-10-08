@@ -34,5 +34,5 @@ jobs:
       - name: Tests
         run: node --test
 
-      - name: Benchmark
+      - name: Install Chromium\n        run: npx playwright install --with-deps chromium\n\n      - name: Benchmark
         run: npm run benchmark
