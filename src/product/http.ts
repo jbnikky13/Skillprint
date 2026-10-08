@@ -35,9 +35,13 @@ export async function handleProductRequest(
    try{
      if(c.tokenExpiresAt&&new Date(c.tokenExpiresAt).getTime()<Date.now()+60000&&c.refreshToken){const fresh=await refreshGmailAccessToken(c.refreshToken);c.accessToken=fresh.accessToken;c.tokenExpiresAt=fresh.expiresAt;await deps.gmail.save(c);}
      const listed=await listGmailMessages(c.accessToken,"newer_than:30d (application OR interview OR assessment OR offer OR rejection)",50);
-     const messages=[];for(const item of listed.messages??[]){const msg=await getGmailMessage(c.accessToken,item.id);const status=classifyGmailMessage(msg);if(status!=="unknown")messages.push({id:msg.id,threadId:msg.threadId,status,subject:msg.headers.subject??"",from:msg.headers.from??"",date:msg.headers.date??"",snippet:msg.snippet??""});}
+     const messages=[];const events=[];const center=await deps.center(identity.accountId,identity);
+const {processGmailEvent}=await import("../application-events/engine.js");
+for(const item of listed.messages??[]){const msg=await getGmailMessage(c.accessToken,item.id);const status=classifyGmailMessage(msg);if(status!=="unknown"){messages.push({id:msg.id,threadId:msg.threadId,status,subject:msg.headers.subject??"",from:msg.headers.from??"",date:msg.headers.date??"",snippet:msg.snippet??""});const event=processGmailEvent(identity.accountId,msg,status,center);if(event)events.push(event);}}
+const snapshot=center.snapshot();
      const profile=await gmailProfile(c.accessToken);c.email=profile.emailAddress;c.googleSub=profile.emailAddress;c.historyId=profile.historyId;c.lastSyncAt=new Date().toISOString();c.status="connected";await deps.gmail.save(c);
-     return json(200,{email:c.email,scanned:listed.messages?.length??0,events:messages,syncedAt:c.lastSyncAt});
+     await deps.center(identity.accountId,identity);
+return json(200,{email:c.email,scanned:listed.messages?.length??0,classified:messages.length,events,syncedAt:c.lastSyncAt});
    }catch(e){c.status="error";await deps.gmail.save(c);return json(502,{error:e instanceof Error?e.message:"Gmail sync failed"})}
  }
  if(req.method==="GET"&&req.path==="/api/me"){
