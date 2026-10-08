@@ -18,12 +18,15 @@ export class DevAuthProvider implements AuthProvider{
  */
 export class SupabaseAuthProvider implements AuthProvider {
   private client: SupabaseClient;
+  private admin?: SupabaseClient;
   constructor(
     url=process.env.SUPABASE_URL,
-    publishableKey=process.env.SUPABASE_PUBLISHABLE_KEY
+    publishableKey=process.env.SUPABASE_PUBLISHABLE_KEY,
+    secretKey=process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
   ){
     if(!url||!publishableKey) throw new Error("SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are required");
     this.client=createClient(url,publishableKey,{auth:{persistSession:false,autoRefreshToken:false}});
+    if(secretKey) this.admin=createClient(url,secretKey,{auth:{persistSession:false,autoRefreshToken:false}});
   }
   async signIn(email:string,password?:string):Promise<AuthIdentity>{
     if(!password) throw new Error("Password is required for production sign-in");
@@ -33,7 +36,8 @@ export class SupabaseAuthProvider implements AuthProvider {
   }
   async signOut(token:string):Promise<void>{
     // Server requests authenticate by access token; revoke that session explicitly.
-    const {error}=await this.client.auth.admin.signOut(token);
+    if(!this.admin) return;
+    const {error}=await this.admin.auth.admin.signOut(token);
     if(error) throw new Error(error.message);
   }
   async verify(token:string):Promise<AuthIdentity|null>{
