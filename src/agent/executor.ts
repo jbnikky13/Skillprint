@@ -5,7 +5,7 @@ export async function executeApplication(task:ApplicationTask,policy:AgentPolicy
  if(task.mode!=="approval"||task.state!=="approved")return {decision:"BLOCKED",ats,verified:false,message:"Explicit application approval is required."};
  if(!ats)return {decision:"BLOCKED",verified:false,message:"Unsupported ATS."};
  const adapter=createATSAdapters().find(x=>x.name===ats);if(!adapter)return {decision:"BLOCKED",ats,verified:false,message:"No adapter available."};
- const browser=await browsers.open();try{const prepared=await adapter.run(task,browser);if(!prepared.prepared)return {decision:"FAILED",ats,verified:false,message:prepared.message??"Preparation failed."};
+ const browser=await browsers.open();try{const prepared=await adapter.run(task,browser);if(!("prepared" in prepared)||!prepared.prepared)return {decision:"FAILED",ats,verified:false,message:prepared.message??"Preparation failed."};
  return {decision:"PREPARED",ats,verified:false,message:"Application prepared. Browser remains open only for the approved execution flow."};
  }finally{await browser.close();}
 }
