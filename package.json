@@ -15,7 +15,8 @@
     "start": "node dist/product/server.js",
     "dev": "node --watch dist/product/server.js",
     "sync:gmail": "npm run build && node dist/run-gmail-sync.js",
-    "browser:install": "playwright install chromium"
+    "browser:install": "playwright install chromium",
+    "greenhouse:smoke": "npm run build && node scripts/greenhouse-smoke.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
