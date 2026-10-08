@@ -9,7 +9,7 @@ const json=(status:number,value:unknown):HTTPResponse=>({status,headers:{"conten
 
 export async function handleProductRequest(
  req:HTTPRequest,
- deps:{auth:AuthProvider; center:(accountId:string)=>CareerCommandCenter}
+ deps:{auth:AuthProvider; center:(accountId:string, identity?:{accountId:string;email:string;role:"candidate"|"recruiter"|"company"|"admin"})=>Promise<CareerCommandCenter>|CareerCommandCenter}
 ):Promise<HTTPResponse>{
  if(req.method==="GET"&&req.path==="/health")return json(200,{ok:true,service:"skillprint"});
  if(req.method==="GET"&&req.path==="/api/dashboard"){
@@ -17,7 +17,7 @@ export async function handleProductRequest(
    if(!token)return json(401,{error:"Authentication required"});
    const identity=await deps.auth.verify(token);
    if(!identity)return json(401,{error:"Invalid session"});
-   return json(200,dashboardView(await deps.center(identity.accountId)));
+   return json(200,dashboardView(await deps.center(identity.accountId,identity)));
  }
  if(req.method==="GET"&&req.path==="/api/me"){
    const token=req.headers?.authorization?.replace(/^Bearer\s+/i,"");
