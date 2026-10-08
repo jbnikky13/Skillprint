@@ -9,7 +9,7 @@ const json=(status:number,value:unknown):HTTPResponse=>({status,headers:{"conten
 
 export async function handleProductRequest(
  req:HTTPRequest,
- deps:{auth:AuthProvider; center:(accountId:string, identity?:{accountId:string;email:string;role:"candidate"|"recruiter"|"company"|"admin"})=>Promise<CareerCommandCenter>|CareerCommandCenter}
+ deps:{auth:AuthProvider; center:(accountId:string, identity?:{accountId:string;email:string;role:"candidate"|"recruiter"|"company"|"admin"})=>Promise<CareerCommandCenter>}
 ):Promise<HTTPResponse>{
  if(req.method==="GET"&&req.path==="/health")return json(200,{ok:true,service:"skillprint"});
  if(req.method==="GET"&&req.path==="/api/dashboard"){
