@@ -61,3 +61,7 @@ See ROADMAP.md for the current product and engineering plan.
 ## License
 
 Apache-2.0
+
+## Gmail OAuth setup
+
+Production Gmail connection setup, the exact Vercel callback URL, and the Supabase connection-table SQL are documented in [`docs/GMAIL_OAUTH_SETUP.md`](docs/GMAIL_OAUTH_SETUP.md). Run [`docs/gmail-oauth-setup.sql`](docs/gmail-oauth-setup.sql) once in the Supabase SQL Editor before connecting Gmail.
