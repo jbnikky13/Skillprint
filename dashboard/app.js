@@ -25,12 +25,17 @@ $("#refresh").onclick=()=>{view(document.querySelector(".nav.active").dataset.vi
  const setMessage=(text)=>{if(message)message.textContent=text};
  let client=null,session=null;
  function showSignedIn(s){session=s;panel.hidden=!!s;gmailPanel.hidden=!s;connect.hidden=!s;signOut.hidden=!s;if(s){setMessage("Signed in as "+(s.user?.email||"your account"));refreshGmailStatus()}else{setMessage("");document.querySelector("#gmailStatus").textContent="Not connected";document.querySelector("#gmailMessage").textContent="Sign in to connect Gmail."}}
- async function refreshGmailStatus(){if(!session?.access_token)return;try{const r=await fetch("/api/gmail/status",{headers:{authorization:"Bearer "+session.access_token}});const body=await r.json();if(!r.ok)throw new Error(body.error||"Could not check Gmail status.");document.querySelector("#gmailStatus").textContent=body.connected?"Connected: "+body.email:"Gmail not connected";document.querySelector("#gmailMessage").textContent=body.connected?"Application email tracking can use this mailbox.":"Connect Gmail to enable read-only application email tracking."}catch(e){document.querySelector("#gmailStatus").textContent="Status unavailable";document.querySelector("#gmailMessage").textContent=e.message||"Could not check Gmail status."}}
  try{
-  const r=await fetch("/api/config");const config=await r.json();if(!r.ok)throw new Error(config.error||"Authentication configuration is missing.");
-  if(!window.supabase?.createClient)throw new Error("Could not load the authentication library. Refresh and try again.");
+  // Publishable keys are designed for browser use. This fallback prevents a missing
+  // Vercel environment variable from disabling account creation.
+  const config={supabaseUrl:"https://ofdvgipsgfrmgqezabgy.supabase.co",supabasePublishableKey:"sb_publishable_ryR2gcMXIpD6dQK8RXJBZQ_a0Zdr2L-"};
+  try{
+   const r=await fetch("/api/config",{cache:"no-store"});
+   if(r.ok){const serverConfig=await r.json();if(serverConfig.supabaseUrl&&serverConfig.supabasePublishableKey)Object.assign(config,serverConfig);}
+  }catch(_e){/* Continue with the public fallback configuration. */}
+  if(!window.supabase?.createClient)throw new Error("The authentication library could not load. Check your connection and refresh.");
   client=window.supabase.createClient(config.supabaseUrl,config.supabasePublishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-  const {data}=await client.auth.getSession();showSignedIn(data.session);
+  const {data,error}=await client.auth.getSession();if(error)throw error;showSignedIn(data.session);
   client.auth.onAuthStateChange((_event,newSession)=>{session=newSession;showSignedIn(newSession)});
  }catch(e){setMessage(e.message||"Could not initialize sign-in.");}
  document.querySelector("#authForm")?.addEventListener("submit",async e=>{e.preventDefault();if(!client)return setMessage("Authentication is not configured. Check Vercel settings.");const email=document.querySelector("#authEmail").value.trim(),password=document.querySelector("#authPassword").value;setMessage("Signing in…");const {data,error}=await client.auth.signInWithPassword({email,password});if(error){setMessage(error.message);return}showSignedIn(data.session);});
