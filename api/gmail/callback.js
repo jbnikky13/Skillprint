@@ -24,9 +24,11 @@ export default async function handler(req,res){
   if(!profileResponse.ok||!profile.emailAddress)throw new Error("Could not verify the connected Gmail account.");
   if(!identityResponse.ok||!identity.sub)throw new Error("Could not verify the Google account identity. Reconnect and grant email access.");
   const db=createClient(url,adminKey,{auth:{persistSession:false,autoRefreshToken:false}});
+  const {data:previous,error:previousError}=await db.from("skillprint_gmail_connections").select("refresh_token").eq("account_id",accountId).maybeSingle();
+  if(previousError)throw previousError;
   const {error}=await db.from("skillprint_gmail_connections").upsert({
    account_id:accountId,google_sub:identity.sub,email:profile.emailAddress,
-   access_token:seal(tokens.access_token),refresh_token:tokens.refresh_token?seal(tokens.refresh_token):null,
+   access_token:seal(tokens.access_token),refresh_token:tokens.refresh_token?seal(tokens.refresh_token):(previous?.refresh_token||null),
    token_expires_at:new Date(Date.now()+(tokens.expires_in||3600)*1000).toISOString(),
    scope:tokens.scope||"https://www.googleapis.com/auth/gmail.readonly openid email",
    history_id:profile.historyId||null,last_sync_at:null,status:"connected",updated_at:new Date().toISOString()
