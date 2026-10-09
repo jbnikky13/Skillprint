@@ -6,7 +6,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "dashboard/index.html",
+      "src": "dashboard/**",
       "use": "@vercel/static"
     }
   ],
