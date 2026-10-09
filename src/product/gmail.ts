@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 
-export const GMAIL_READONLY_SCOPE="https://www.googleapis.com/auth/gmail.readonly";
+export const GMAIL_READONLY_SCOPE="https://www.googleapis.com/auth/gmail.readonly openid email";
 
 export interface GmailConnection{accountId:string;googleSub:string;email:string;accessToken?:string;refreshToken?:string;tokenExpiresAt?:string;scope:string;historyId?:string;lastSyncAt?:string;status:"connected"|"revoked"|"error";}
 export interface GmailMessage{ id:string;threadId?:string;internalDate?:string;snippet?:string;labelIds?:string[];headers:Record<string,string>;bodyText?:string; }
@@ -8,7 +8,7 @@ export interface GmailMessage{ id:string;threadId?:string;internalDate?:string;s
 const enc=(v:string)=>encodeURIComponent(v);
 const oauthStateSecret=()=>process.env.GMAIL_OAUTH_STATE_SECRET??process.env.SUPABASE_SECRET_KEY??process.env.SUPABASE_SERVICE_ROLE_KEY;
 export function createGmailState(accountId:string){const secret=oauthStateSecret();if(!secret)throw new Error("GMAIL_OAUTH_STATE_SECRET is required");const payload=b64url(JSON.stringify({accountId,exp:Date.now()+10*60*1000}));const sig=crypto.createHmac("sha256",secret).update(payload).digest("base64url");return payload+"."+sig;}
-export function verifyGmailState(state:string){const secret=oauthStateSecret();if(!secret)return null;const parts=state.split(".");if(parts.length!==2)return null;const [payload,sig]=parts;if(!payload||!sig)return null;const expected=crypto.createHmac("sha256",secret).update(payload).digest("base64url");if(!crypto.timingSafeEqual(Buffer.from(sig),Buffer.from(expected)))return null;try{const p=JSON.parse(Buffer.from(payload,"base64url").toString("utf8"));return p.exp>Date.now()?String(p.accountId):null}catch{return null}}
+export function verifyGmailState(state:string){const secret=oauthStateSecret();if(!secret)return null;const parts=state.split(".");if(parts.length!==2)return null;const [payload,sig]=parts;if(!payload||!sig)return null;const expected=crypto.createHmac("sha256",secret).update(payload).digest("base64url");const actual=Buffer.from(sig);const expectedBytes=Buffer.from(expected);if(actual.length!==expectedBytes.length||!crypto.timingSafeEqual(actual,expectedBytes))return null;try{const p=JSON.parse(Buffer.from(payload,"base64url").toString("utf8"));return p.exp>Date.now()?String(p.accountId):null}catch{return null}}
 const b64url=(v:Buffer|string)=>Buffer.from(v).toString("base64url");
 
 export function gmailOAuthConfig(){
