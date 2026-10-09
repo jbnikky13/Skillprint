@@ -21,6 +21,15 @@ function normalizeFingerprint(value){
   remoteEligible:typeof fp.remoteEligible==="boolean"?fp.remoteEligible:false
  };
 }
+function errorPayload(error){
+ if(error instanceof Error)return {error:error.message};
+ if(error&&typeof error==="object"){
+  const e=error;
+  const message=[e.message,e.details,e.hint].filter(x=>typeof x==="string"&&x.trim()).join(" — ");
+  return {error:message||"Application preparation failed.",...(typeof e.code==="string"?{code:e.code}:{})};
+ }
+ return {error:typeof error==="string"?error:"Application preparation failed."};
+}
 
 export default async function handler(req,res){
  if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
@@ -37,5 +46,10 @@ export default async function handler(req,res){
   const {data:application,error:saveError}=await db.from("applications").insert({job_id:job.id,status,cv_id:pkg.cv.cvId,cover_letter:pkg.coverLetter.content,answers:pkg.answers}).select("id,status,job_id,cv_id,created_at").single();
   if(saveError)throw saveError;
   return res.status(201).json({application,approvalId:approval.id,truthReport:pkg.truthReport,cv:pkg.cv,coverLetter:pkg.coverLetter,tailoredCV:pkg.tailoredCV});
- }catch(e){return res.status(422).json({error:e instanceof Error?e.message:String(e)});}
+ }catch(e){
+  const payload=errorPayload(e);
+  if(e&&typeof e==="object"&&!(e instanceof Error))console.error("Application preparation failed",payload);
+  else console.error("Application preparation failed",payload.error);
+  return res.status(422).json(payload);
+ }
 }
