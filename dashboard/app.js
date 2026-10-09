@@ -25,6 +25,7 @@ $("#refresh").onclick=()=>{view(document.querySelector(".nav.active").dataset.vi
  const setMessage=(text)=>{if(message)message.textContent=text};
  let client=null,session=null;
  function showSignedIn(s){session=s;panel.hidden=!!s;gmailPanel.hidden=!s;connect.hidden=!s;signOut.hidden=!s;if(s){setMessage("Signed in as "+(s.user?.email||"your account"));refreshGmailStatus()}else{setMessage("");document.querySelector("#gmailStatus").textContent="Not connected";document.querySelector("#gmailMessage").textContent="Sign in to connect Gmail."}}
+ async function refreshGmailStatus(){if(!session?.access_token)return;try{const r=await fetch("/api/gmail/status",{headers:{authorization:"Bearer "+session.access_token}});const body=await r.json();if(!r.ok)throw new Error(body.error||"Could not check Gmail status.");document.querySelector("#gmailStatus").textContent=body.connected?"Connected: "+body.email:"Gmail not connected";document.querySelector("#gmailMessage").textContent=body.connected?"Application email tracking can use this mailbox.":"Connect Gmail to enable read-only application email tracking."}catch(e){document.querySelector("#gmailStatus").textContent="Status unavailable";document.querySelector("#gmailMessage").textContent=e.message||"Could not check Gmail status."}}
  try{
   // Publishable keys are designed for browser use. This fallback prevents a missing
   // Vercel environment variable from disabling account creation.
