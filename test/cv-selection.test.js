@@ -33,3 +33,9 @@ test("selects pharmacy CV for pharmacist role", () => {
   const ranked = selectBestCV(job, cvProfiles);
   assert.equal(ranked[0].cvId, "pharmacy-healthcare");
 });
+
+test("does not crash when a stored job fingerprint is missing signal arrays", () => {
+  const ranked = selectBestCV({ kind: "job" }, cvProfiles);
+  assert.equal(ranked.length, cvProfiles.length);
+  assert.ok(ranked[0].cvId);
+});
