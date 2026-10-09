@@ -24,16 +24,33 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 24
-          # Skillprint currently has no package-lock.json; disable setup-node caching
-          # until a lockfile is committed, otherwise setup-node fails before install.
+          # No package-lock.json is committed yet, so disable npm caching.
           package-manager-cache: false
 
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Validate required GitHub Actions secrets
+        shell: bash
+        env:
+          SUPABASE_SECRET_KEY: ${{ secrets.SKILLPRINT_SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_SECRET_KEY }}
+          GMAIL_TOKEN_ENCRYPTION_KEY: ${{ secrets.SKILLPRINT_GMAIL_TOKEN_ENCRYPTION_KEY || secrets.GMAIL_TOKEN_ENCRYPTION_KEY }}
+        run: |
+          missing=0
+          if [[ -z "$SUPABASE_SECRET_KEY" ]]; then
+            echo "::error::Missing Supabase service-role secret. Add SKILLPRINT_SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_ROLE_KEY / SUPABASE_SECRET_KEY) in GitHub repository Actions secrets."
+            missing=1
+          fi
+          if [[ -z "$GMAIL_TOKEN_ENCRYPTION_KEY" ]]; then
+            echo "::error::Missing GMAIL_TOKEN_ENCRYPTION_KEY. Add SKILLPRINT_GMAIL_TOKEN_ENCRYPTION_KEY (or GMAIL_TOKEN_ENCRYPTION_KEY) in GitHub repository Actions secrets. Use the same 64-character hex key as Vercel."
+            missing=1
+          fi
+          if [[ "$missing" -ne 0 ]]; then exit 1; fi
+          echo "Required Gmail sync secrets are present."
+
       - name: Sync connected Gmail accounts
         run: npm run sync:gmail
         env:
-          SUPABASE_URL: ${{ secrets.SKILLPRINT_SUPABASE_URL }}
-          SUPABASE_SECRET_KEY: ${{ secrets.SKILLPRINT_SUPABASE_SERVICE_ROLE_KEY }}
-          GMAIL_TOKEN_ENCRYPTION_KEY: ${{ secrets.SKILLPRINT_GMAIL_TOKEN_ENCRYPTION_KEY }}
+          SUPABASE_URL: https://ofdvgipsgfrmgqezabgy.supabase.co
+          SUPABASE_SECRET_KEY: ${{ secrets.SKILLPRINT_SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_SERVICE_ROLE_KEY || secrets.SUPABASE_SECRET_KEY }}
+          GMAIL_TOKEN_ENCRYPTION_KEY: ${{ secrets.SKILLPRINT_GMAIL_TOKEN_ENCRYPTION_KEY || secrets.GMAIL_TOKEN_ENCRYPTION_KEY }}
