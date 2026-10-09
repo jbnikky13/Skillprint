@@ -5,6 +5,23 @@ import { prepareApplication } from "../../src/application/package.js";
 import { createApprovalItem } from "../../src/application/approval.js";
 
 function client(){const url=process.env.SUPABASE_URL,key=process.env.SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error("Database is not configured.");return createClient(url,key,{auth:{persistSession:false}});}
+
+function signalArray(value){return Array.isArray(value)?value.filter(x=>x&&typeof x.name==="string"):[];}
+function normalizeFingerprint(value){
+ const fp=value&&typeof value==="object"?value:{};
+ return {
+  ...fp,
+  version:1,
+  kind:"job",
+  skills:signalArray(fp.skills),
+  tools:signalArray(fp.tools),
+  domains:signalArray(fp.domains),
+  roles:signalArray(fp.roles),
+  locations:Array.isArray(fp.locations)?fp.locations:[],
+  remoteEligible:typeof fp.remoteEligible==="boolean"?fp.remoteEligible:false
+ };
+}
+
 export default async function handler(req,res){
  if(req.method!=="POST")return res.status(405).json({error:"Method not allowed"});
  try{
@@ -13,7 +30,7 @@ export default async function handler(req,res){
   const db=client();
   const {data:job,error}=await db.from("jobs").select("*").eq("id",body.job_id).single();
   if(error||!job)return res.status(404).json({error:"Job not found"});
-  const normalized={id:job.id,title:job.title,company:job.company??undefined,description:job.description,url:job.url,location:job.location??undefined,remote:job.remote,source:job.source,postedAt:job.posted_at??undefined,expiresAt:job.expires_at??undefined,fingerprint:job.raw?.fingerprint??{}};
+  const normalized={id:job.id,title:job.title,company:job.company??undefined,description:job.description??"",url:job.url??"",location:job.location??undefined,remote:job.remote,source:job.source??"unknown",postedAt:job.posted_at??undefined,expiresAt:job.expires_at??undefined,fingerprint:normalizeFingerprint(job.raw?.fingerprint??job.fingerprint)};
   const pkg=prepareApplication(personalCandidate,cvProfiles,{job:normalized,finalScore:Number(job.score||0),rankReasons:Array.isArray(job.reasons)?job.reasons:[]});
   const approval=createApprovalItem(pkg);
   const status=pkg.truthReport.valid?"pending_approval":"rejected";
