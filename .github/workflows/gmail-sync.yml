@@ -19,13 +19,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Setup Node 24
         uses: actions/setup-node@v5
         with:
           node-version: 24
-          cache: npm
+          # Skillprint currently has no package-lock.json; disable setup-node caching
+          # until a lockfile is committed, otherwise setup-node fails before install.
+          package-manager-cache: false
+
       - name: Install dependencies
-        run: npm ci --no-audit --no-fund
+        run: npm install --no-audit --no-fund
+
       - name: Sync connected Gmail accounts
         run: npm run sync:gmail
         env:
