@@ -4,7 +4,7 @@ import { personalCandidate } from "../../src/profile/personal.js";
 import { prepareApplication } from "../../src/application/package.js";
 import { createApprovalItem } from "../../src/application/approval.js";
 
-function client(){const url=process.env.SUPABASE_URL,key=process.env.SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error("Database is not configured.");return createClient(url,key,{auth:{persistSession:false}});}
+function client(){const url=process.env.SUPABASE_URL,key=process.env.SUPABASE_SECRET_KEY||process.env.SUPABASE_SERVICE_ROLE_KEY;if(!url||!key)throw new Error("Server database credentials are not configured. Set SUPABASE_SECRET_KEY (or SUPABASE_SERVICE_ROLE_KEY) in the deployment environment.");return createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});}
 
 function signalArray(value){return Array.isArray(value)?value.filter(x=>x&&typeof x.name==="string"):[];}
 function normalizeFingerprint(value){
